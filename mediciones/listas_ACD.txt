@@ -1,0 +1,60 @@
+  descargando lista «pgl»…
+    3546 dominios
+  bloqueador C: 3563 dominios
+  descargando lista «stevenblack»…
+    80168 dominios
+  bloqueador C: 80206 dominios
+www.elcomercio.pe          A:   5.52 MB,  45 conexiones,   0 bloqueadas
+www.elcomercio.pe          C:   5.22 MB,  45 conexiones,  24 bloqueadas
+www.elcomercio.pe          D:   5.55 MB,  45 conexiones,  25 bloqueadas
+larepublica.pe             A:   0.05 MB,   6 conexiones,   0 bloqueadas
+larepublica.pe             C:   0.02 MB,   2 conexiones,   0 bloqueadas
+larepublica.pe             D:   0.05 MB,   6 conexiones,   0 bloqueadas
+www.infobae.com            A:   3.35 MB,  29 conexiones,   0 bloqueadas
+www.infobae.com            C:   3.35 MB,  29 conexiones,  27 bloqueadas
+www.infobae.com            D:   3.35 MB,  29 conexiones,  52 bloqueadas
+www.marca.com              A:   4.36 MB,  41 conexiones,   0 bloqueadas
+www.marca.com              C:   6.28 MB,  41 conexiones,   5 bloqueadas
+www.marca.com              D:   5.60 MB,  42 conexiones,   9 bloqueadas
+as.com                     A:   4.35 MB,  85 conexiones,   0 bloqueadas
+as.com                     C:   4.31 MB,  82 conexiones,  53 bloqueadas
+as.com                     D:   4.38 MB,  83 conexiones,  70 bloqueadas
+www.cnn.com                A:  13.16 MB,  23 conexiones,   0 bloqueadas
+www.cnn.com                C:  13.16 MB,  22 conexiones,  30 bloqueadas
+www.cnn.com                D:  13.14 MB,  21 conexiones,  40 bloqueadas
+www.bbc.com                A:   5.14 MB,  36 conexiones,   0 bloqueadas
+www.bbc.com                C:   5.14 MB,  35 conexiones,  23 bloqueadas
+www.bbc.com                D:   5.12 MB,  36 conexiones,  25 bloqueadas
+www.nytimes.com            A:   0.38 MB,  12 conexiones,   0 bloqueadas
+www.nytimes.com            C:   0.37 MB,  12 conexiones,   0 bloqueadas
+www.nytimes.com            D:   0.38 MB,  12 conexiones,   0 bloqueadas
+www.dailymail.co.uk        A:   0.01 MB,   2 conexiones,   0 bloqueadas
+www.dailymail.co.uk        C:   0.01 MB,   2 conexiones,   0 bloqueadas
+www.dailymail.co.uk        D:   0.04 MB,   6 conexiones,   0 bloqueadas
+www.forbes.com             A:  13.77 MB,  48 conexiones,   0 bloqueadas
+www.forbes.com             C:  13.53 MB,  48 conexiones,  18 bloqueadas
+www.forbes.com             D:  13.50 MB,  47 conexiones,  27 bloqueadas
+
+============================================================================================
+Sitio                          A (MB)     C (MB)     D (MB)   ahorro C   ahorro D
+www.elcomercio.pe                5.52       5.22       5.55        5 %       -1 %
+larepublica.pe                   0.05       0.02       0.05        n/d        n/d
+www.infobae.com                  3.35       3.35       3.35        0 %       -0 %
+www.marca.com                    4.36       6.28       5.60      -44 %      -28 %
+as.com                           4.35       4.31       4.38        1 %       -1 %
+www.cnn.com                     13.16      13.16      13.14       -0 %        0 %
+www.bbc.com                      5.14       5.14       5.12        0 %        0 %
+www.nytimes.com                  0.38       0.37       0.38        1 %       -1 %
+www.dailymail.co.uk              0.01       0.01       0.04        n/d        n/d
+www.forbes.com                  13.77      13.53      13.50        2 %        2 %
+============================================================================================
+Config C (NavTool: incluida + Peter Lowe): ahorro medio -4 % · mediana 1 % · rango -44 % a 5 % (8 sitios)
+Config D (NavTool: incluida + Peter Lowe + StevenBlack): ahorro medio -4 % · mediana -0 % · rango -28 % a 2 % (8 sitios)
+
+En qué se gasta (sin bloqueo, todos los sitios):
+  Propio              27.70 MB  (55 %)
+  Otro tercero        20.58 MB  (41 %)
+  Infraestructura      1.28 MB  (3 %)
+  Redes sociales       0.53 MB  (1 %)
+
+Guardado en mediciones/listas_ACD.json

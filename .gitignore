@@ -1,0 +1,23 @@
+# build output
+build/
+dist/
+Output/
+*.spec
+__pycache__/
+*.pyc
+
+# runtime data (never commit personal data)
+Datos/
+errores.log
+history.db*
+config.json
+programas_bloqueados.json
+
+# measurement cache (downloaded third-party lists)
+mediciones/cache_listas/
+
+# editors / OS
+.vscode/
+.idea/
+Thumbs.db
+*.tmp

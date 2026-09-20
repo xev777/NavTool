@@ -1,0 +1,342 @@
+[
+ {
+  "url": "https://www.elcomercio.pe",
+  "A": {
+   "url": "https://www.elcomercio.pe",
+   "bytes": 5366052,
+   "conexiones": 45,
+   "por_categoria": {
+    "own": 3078979,
+    "third": 1740017,
+    "infra": 306996,
+    "social": 240060
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 11.4,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.elcomercio.pe",
+   "bytes": 5283234,
+   "conexiones": 45,
+   "por_categoria": {
+    "own": 3079210,
+    "infra": 312433,
+    "third": 1651615,
+    "social": 239976
+   },
+   "bloqueados": 14,
+   "hosts_bloqueados": [
+    "cm.g.doubleclick.net",
+    "image6.pubmatic.com",
+    "micro.rubiconproject.com",
+    "securepubads.g.doubleclick.net",
+    "www.googletagmanager.com"
+   ],
+   "segundos": 9.9,
+   "error": null
+  }
+ },
+ {
+  "url": "https://larepublica.pe",
+  "A": {
+   "url": "https://larepublica.pe",
+   "bytes": 17610,
+   "conexiones": 2,
+   "por_categoria": {
+    "own": 17610
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 9.9,
+   "error": null
+  },
+  "B": {
+   "url": "https://larepublica.pe",
+   "bytes": 17906,
+   "conexiones": 2,
+   "por_categoria": {
+    "own": 17906
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 10.0,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.infobae.com",
+  "A": {
+   "url": "https://www.infobae.com",
+   "bytes": 3530278,
+   "conexiones": 29,
+   "por_categoria": {
+    "own": 2595751,
+    "infra": 35187,
+    "third": 583328,
+    "social": 316012
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 7.3,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.infobae.com",
+   "bytes": 3501091,
+   "conexiones": 29,
+   "por_categoria": {
+    "own": 2573999,
+    "third": 576396,
+    "infra": 35090,
+    "social": 315606
+   },
+   "bloqueados": 16,
+   "hosts_bloqueados": [
+    "sb.scorecardresearch.com",
+    "securepubads.g.doubleclick.net",
+    "stats.g.doubleclick.net",
+    "tpc.googlesyndication.com",
+    "www.google-analytics.com",
+    "www.googletagmanager.com"
+   ],
+   "segundos": 6.5,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.marca.com",
+  "A": {
+   "url": "https://www.marca.com",
+   "bytes": 5666687,
+   "conexiones": 39,
+   "por_categoria": {
+    "own": 627100,
+    "third": 4964234,
+    "infra": 75353
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 13.7,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.marca.com",
+   "bytes": 5282953,
+   "conexiones": 41,
+   "por_categoria": {
+    "own": 144110,
+    "third": 5061732,
+    "infra": 77111
+   },
+   "bloqueados": 4,
+   "hosts_bloqueados": [
+    "googleads.g.doubleclick.net",
+    "securepubads.g.doubleclick.net",
+    "static.doubleclick.net",
+    "www.googletagmanager.com"
+   ],
+   "segundos": 13.2,
+   "error": null
+  }
+ },
+ {
+  "url": "https://as.com",
+  "A": {
+   "url": "https://as.com",
+   "bytes": 4544061,
+   "conexiones": 83,
+   "por_categoria": {
+    "own": 535014,
+    "third": 4009047
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 19.5,
+   "error": null
+  },
+  "B": {
+   "url": "https://as.com",
+   "bytes": 4519882,
+   "conexiones": 83,
+   "por_categoria": {
+    "own": 534412,
+    "third": 3985470
+   },
+   "bloqueados": 17,
+   "hosts_bloqueados": [
+    "ads.pubmatic.com",
+    "cdn.taboola.com",
+    "hbopenbid.pubmatic.com",
+    "ib.adnxs.com",
+    "match.adsrvr.org",
+    "sb.scorecardresearch.com",
+    "securepubads.g.doubleclick.net"
+   ],
+   "segundos": 13.8,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.cnn.com",
+  "A": {
+   "url": "https://www.cnn.com",
+   "bytes": 13805949,
+   "conexiones": 21,
+   "por_categoria": {
+    "own": 12990694,
+    "third": 815255
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 8.0,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.cnn.com",
+   "bytes": 13800715,
+   "conexiones": 21,
+   "por_categoria": {
+    "own": 12990575,
+    "third": 810140
+   },
+   "bloqueados": 9,
+   "hosts_bloqueados": [
+    "ib.adnxs.com",
+    "micro.rubiconproject.com",
+    "pagead2.googlesyndication.com",
+    "pixel-us-east.rubiconproject.com",
+    "securepubads.g.doubleclick.net",
+    "tpc.googlesyndication.com"
+   ],
+   "segundos": 7.2,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.bbc.com",
+  "A": {
+   "url": "https://www.bbc.com",
+   "bytes": 5340583,
+   "conexiones": 36,
+   "por_categoria": {
+    "own": 247168,
+    "third": 5093415
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 8.6,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.bbc.com",
+   "bytes": 5393935,
+   "conexiones": 36,
+   "por_categoria": {
+    "own": 243276,
+    "third": 5150659
+   },
+   "bloqueados": 4,
+   "hosts_bloqueados": [
+    "pagead2.googlesyndication.com",
+    "sb.scorecardresearch.com",
+    "securepubads.g.doubleclick.net"
+   ],
+   "segundos": 7.1,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.nytimes.com",
+  "A": {
+   "url": "https://www.nytimes.com",
+   "bytes": 395301,
+   "conexiones": 12,
+   "por_categoria": {
+    "own": 22460,
+    "third": 372841
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 12.0,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.nytimes.com",
+   "bytes": 395030,
+   "conexiones": 12,
+   "por_categoria": {
+    "own": 22367,
+    "third": 372663
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 11.3,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.dailymail.co.uk",
+  "A": {
+   "url": "https://www.dailymail.co.uk",
+   "bytes": 14136,
+   "conexiones": 2,
+   "por_categoria": {
+    "own": 14136
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 3.8,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.dailymail.co.uk",
+   "bytes": 33700,
+   "conexiones": 6,
+   "por_categoria": {
+    "own": 15103,
+    "third": 18597
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 3.8,
+   "error": null
+  }
+ },
+ {
+  "url": "https://www.forbes.com",
+  "A": {
+   "url": "https://www.forbes.com",
+   "bytes": 14416021,
+   "conexiones": 48,
+   "por_categoria": {
+    "own": 9367282,
+    "third": 4127455,
+    "infra": 921284
+   },
+   "bloqueados": 0,
+   "hosts_bloqueados": [],
+   "segundos": 10.4,
+   "error": null
+  },
+  "B": {
+   "url": "https://www.forbes.com",
+   "bytes": 14378466,
+   "conexiones": 48,
+   "por_categoria": {
+    "own": 9367879,
+    "third": 4096511,
+    "infra": 914076
+   },
+   "bloqueados": 3,
+   "hosts_bloqueados": [
+    "securepubads.g.doubleclick.net",
+    "static.criteo.net",
+    "www.googletagmanager.com"
+   ],
+   "segundos": 9.5,
+   "error": null
+  }
+ }
+]

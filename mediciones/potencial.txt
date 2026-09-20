@@ -1,0 +1,55 @@
+  bloqueador C: 3563 dominios
+  bloqueador C: 80206 dominios
+www.elcomercio.pe          A:   5.04 MB,  48 conexiones,   0 bloqueadas
+larepublica.pe             A:   0.05 MB,   6 conexiones,   0 bloqueadas
+www.infobae.com            A:   3.34 MB,  29 conexiones,   0 bloqueadas
+www.marca.com              A:   4.89 MB,  43 conexiones,   0 bloqueadas
+as.com                     A:   4.39 MB,  93 conexiones,   0 bloqueadas
+www.cnn.com                A:  13.13 MB,  20 conexiones,   0 bloqueadas
+www.bbc.com                A:   5.14 MB,  36 conexiones,   0 bloqueadas
+www.nytimes.com            A:   0.38 MB,  12 conexiones,   0 bloqueadas
+www.dailymail.co.uk        A:   0.03 MB,   6 conexiones,   0 bloqueadas
+www.forbes.com             A:  13.71 MB,  48 conexiones,   0 bloqueadas
+
+============================================================================================
+Sitio                          A (MB)
+www.elcomercio.pe                5.04
+larepublica.pe                   0.05
+www.infobae.com                  3.34
+www.marca.com                    4.89
+as.com                           4.39
+www.cnn.com                     13.13
+www.bbc.com                      5.14
+www.nytimes.com                  0.38
+www.dailymail.co.uk              0.03
+www.forbes.com                  13.71
+============================================================================================
+
+En qué se gasta (sin bloqueo, todos los sitios):
+  Propio              27.65 MB  (55 %)
+  Otro tercero        20.65 MB  (41 %)
+  Infraestructura      1.27 MB  (3 %)
+  Redes sociales       0.53 MB  (1 %)
+
+BYTES QUE CADA LISTA EVITARÍA (medidos sobre las mismas cargas sin bloqueo):
+  B NavTool: lista inicial (27 dominios)             evita   0.00 MB de  50.10 MB (0.0 %) · 0 servidores distintos
+  C NavTool: incluida + Peter Lowe                   evita   0.00 MB de  50.10 MB (0.0 %) · 0 servidores distintos
+  D NavTool: incluida + Peter Lowe + StevenBlack     evita   0.00 MB de  50.10 MB (0.0 %) · 0 servidores distintos
+
+Dónde va realmente el peso: servidores con más bytes (todos los sitios):
+   11.12 MB  media.cnn.com
+    5.25 MB  imageio.forbes.com
+    3.28 MB  ichef.bbci.co.uk
+    2.57 MB  www.forbes.com
+    2.30 MB  www.infobae.com
+    1.87 MB  cdnespecial.elcomercio.pe
+    1.63 MB  i.ytimg.com
+    1.52 MB  substrate.office.com
+    1.23 MB  edition.cnn.com
+    1.19 MB  static.files.bbci.co.uk
+    1.18 MB  img.asmedia.epimg.net
+    1.16 MB  nuevasnarrativasec.github.io
+    1.10 MB  www.youtube.com
+    1.00 MB  images.forbes.com
+
+Guardado en mediciones/potencial.json

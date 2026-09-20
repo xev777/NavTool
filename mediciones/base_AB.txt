@@ -1,0 +1,43 @@
+www.elcomercio.pe          A:   5.12 MB,  45 conexiones,   0 bloqueadas
+www.elcomercio.pe          B:   5.04 MB,  45 conexiones,  14 bloqueadas
+larepublica.pe             A:   0.02 MB,   2 conexiones,   0 bloqueadas
+larepublica.pe             B:   0.02 MB,   2 conexiones,   0 bloqueadas
+www.infobae.com            A:   3.37 MB,  29 conexiones,   0 bloqueadas
+www.infobae.com            B:   3.34 MB,  29 conexiones,  16 bloqueadas
+www.marca.com              A:   5.40 MB,  39 conexiones,   0 bloqueadas
+www.marca.com              B:   5.04 MB,  41 conexiones,   4 bloqueadas
+as.com                     A:   4.33 MB,  83 conexiones,   0 bloqueadas
+as.com                     B:   4.31 MB,  83 conexiones,  17 bloqueadas
+www.cnn.com                A:  13.17 MB,  21 conexiones,   0 bloqueadas
+www.cnn.com                B:  13.16 MB,  21 conexiones,   9 bloqueadas
+www.bbc.com                A:   5.09 MB,  36 conexiones,   0 bloqueadas
+www.bbc.com                B:   5.14 MB,  36 conexiones,   4 bloqueadas
+www.nytimes.com            A:   0.38 MB,  12 conexiones,   0 bloqueadas
+www.nytimes.com            B:   0.38 MB,  12 conexiones,   0 bloqueadas
+www.dailymail.co.uk        A:   0.01 MB,   2 conexiones,   0 bloqueadas
+www.dailymail.co.uk        B:   0.03 MB,   6 conexiones,   0 bloqueadas
+www.forbes.com             A:  13.75 MB,  48 conexiones,   0 bloqueadas
+www.forbes.com             B:  13.71 MB,  48 conexiones,   3 bloqueadas
+
+============================================================================================
+Sitio                           A (MB)      B (MB)    ahorro B
+www.elcomercio.pe                 5.12        5.04         2 %
+larepublica.pe                    0.02        0.02         n/d
+www.infobae.com                   3.37        3.34         1 %
+www.marca.com                     5.40        5.04         7 %
+as.com                            4.33        4.31         1 %
+www.cnn.com                      13.17       13.16         0 %
+www.bbc.com                       5.09        5.14        -1 %
+www.nytimes.com                   0.38        0.38         0 %
+www.dailymail.co.uk               0.01        0.03         n/d
+www.forbes.com                   13.75       13.71         0 %
+============================================================================================
+Config B: ahorro medio 1 % · mediana 0 % · rango -1 % a 7 % (8 sitios)
+
+En qué se gasta (sin bloqueo, todos los sitios):
+  Propio              28.13 MB  (56 %)
+  Otro tercero        20.70 MB  (41 %)
+  Infraestructura      1.28 MB  (3 %)
+  Redes sociales       0.53 MB  (1 %)
+
+Guardado en mediciones/base_AB.json
