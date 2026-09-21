@@ -14,6 +14,7 @@ cómo cargan las páginas, quién te rastrea y qué programas usan tu red. Funci
 | **Listas de bloqueo** | Lista incluida, listas opcionales (Peter Lowe / StevenBlack), lista personal y excepciones. |
 | **Monitor de red** | Cada programa, con quién habla, cuánto mueve. Captura con Npcap, totales exactos. |
 | **Bloquear un programa** | Clic derecho en el monitor → reglas del Cortafuegos de Windows (1 h / 4 h / hasta desbloquear). |
+| **Apps de la Tienda** | WhatsApp, Microsoft Store y otras apps de la Tienda funcionan con el proxy encendido (exención de loopback de Windows, con un clic). |
 | **Cuota mensual** | Define tu plan y el día de corte: consumo, proyección y avisos al 80 % / 100 %. |
 | **Historial y alertas** | Consumo por minuto y por programa, programas nuevos, subidas sostenidas. Solo en tu PC. |
 | **Buscador** | Hasta 5 motores, una tecla para buscar en todos. |
@@ -50,10 +51,10 @@ powershell -ExecutionPolicy Bypass -File .\compilar.ps1
 
 ```powershell
 python pruebas_seguridad.py    # 52 pruebas de ataque y regresión
-python pruebas_funciones.py    # cuota, bloqueo de programas, idiomas, créditos
+python pruebas_funciones.py    # cuota, bloqueo de programas, apps de la Tienda, idiomas, créditos
 ```
 
-Más: [SEGURIDAD.md](SEGURIDAD.md) · [MEDICION.md](MEDICION.md) · [TRADUCIR.md](TRADUCIR.md) · [LICENCIAS-TERCEROS.md](LICENCIAS-TERCEROS.md)
+Más: [SEGURIDAD.md](SEGURIDAD.md) · [MEDICION.md](MEDICION.md) · [TRADUCIR.md](TRADUCIR.md) · [CHANGELOG.md](CHANGELOG.md) · [LICENCIAS-TERCEROS.md](LICENCIAS-TERCEROS.md)
 
 ## Licencia
 

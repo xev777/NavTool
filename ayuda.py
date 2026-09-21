@@ -9,7 +9,7 @@ import webbrowser
 from i18n import tr
 from safety import monitor_work_area
 
-VERSION = "1.1"
+VERSION = "1.1.1"
 BG, PANEL, FG, MUTED, ACC = "#1b2a41", "#0f1a2b", "#e8eef7", "#8ea3bd", "#3fa9f5"
 CREDITOS = {"autor": "Fernando", "repo": "", "licencia": "", "donaciones": []}
 try:        # creditos.json (junto a la app): autor, enlace del código fuente y donaciones opcionales
@@ -209,6 +209,9 @@ _sec("Consejos",
      ("b", "Un navegador no filtra: comprueba que ⏻ esté en ON y reinicia el navegador. Si usa su propia "
            "configuración de proxy o una VPN, puede saltarse NavTool (el monitor 📡 sí lo verá)."),
      ("b", "📡 Tráfico no arranca: instala Npcap desde npcap.com y abre NavTool como administrador."),
+     ("b", "Con el proxy encendido, WhatsApp o la Microsoft Store (apps de la Tienda) no conectan: es una "
+           "restricción de Windows. Clic derecho en la barra → «Compatibilidad con apps de la Tienda…» y marca "
+           "esas apps."),
      ("b", "Si cierras NavTool de forma brusca, la próxima vez que se abra limpia el proxy de Windows solo."),
      ("h", "Cómo leer las cifras"),
      ("b", "NavTool muestra los tamaños en GB de 1024 MB (como el Administrador de tareas); "

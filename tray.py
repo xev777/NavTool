@@ -99,6 +99,7 @@ class Tray:
             SEP,
             (tr("📅 Cuota mensual de datos"), "quota", False, None, True),
             (tr("🚫 Programas bloqueados"), "blocked", False, None, True),
+            (tr("🛍 Compatibilidad con apps de la Tienda"), "store", False, None, True),
             SEP,
             (tr("❓ Ayuda"), "help", False, None, True),
             (tr("Acerca de NavTool"), "about", False, None, True),

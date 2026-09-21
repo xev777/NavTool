@@ -6,7 +6,7 @@
 ; {app}\idioma.txt y es el idioma inicial de la aplicación (luego se cambia desde la propia barra).
 
 #define AppName "NavTool"
-#define AppVersion "1.1"
+#define AppVersion "1.1.1"
 #define AppExe "NavTool.exe"
 
 [Setup]
@@ -70,6 +70,8 @@ Filename: "{app}\{#AppExe}"; Description: "{cm:RunNow}"; Flags: nowait postinsta
 Filename: "{app}\{#AppExe}"; Parameters: "--desactivar-inicio"; Flags: runhidden; RunOnceId: "QuitarInicio"
 ; Removes the Windows Firewall rules NavTool created ("NavTool block: ...")
 Filename: "{app}\{#AppExe}"; Parameters: "--quitar-bloqueos"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarBloqueos"
+; Removes the Microsoft Store apps loopback exemptions NavTool created
+Filename: "{app}\{#AppExe}"; Parameters: "--quitar-exenciones"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarExenciones"
 
 [UninstallDelete]
 Type: files; Name: "{app}\idioma.txt"

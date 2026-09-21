@@ -26,6 +26,7 @@ import blocklists
 import cuota
 import i18n
 import programas
+import tienda
 from i18n import tr
 from history import History
 from safety import (force_paint, paint_soon, clean_text, http_url, in_protected_folder, is_reparse, known_folder,
@@ -118,6 +119,7 @@ DEFAULT_CFG = {
     "quota_gb": 0.0,              # cuota mensual de datos de tu plan (0 = sin cuota)
     "quota_day": 1,               # día del mes en que empieza tu ciclo de facturación
     "quota_count": "both",        # qué cuenta tu plan: "both" (bajada + subida) o "down"
+    "store_hint": False,          # ya se avisó de las apps de la Tienda al encender el proxy
     "lang": None,                 # idioma de la interfaz (None = el elegido al instalar; «en» por defecto)
     "ui_scale": 0.85,             # tamaño de textos y ventanas (1.0 normal · 0.85 pequeño · 0.75 muy pequeño)
     "intro": True,                # animación de inicio de 3 segundos
@@ -341,6 +343,7 @@ def reload_lists():
 reload_lists()
 HIST = History(os.path.join(DATA_DIR, "history.db"))
 programas.configurar(os.path.join(DATA_DIR, "programas_bloqueados.json"))
+tienda.configurar(DATA_DIR)
 
 
 # ---------------------------------------------------------------- instancia única
@@ -721,7 +724,7 @@ class Floating(tk.Tk):
                  "toggle_proxy": self.toggle_proxy, "traffic": self.win_traffic,
                  "report": self.win_report, "history": self.win_history,
                  "help": self.win_help, "about": lambda: self.win_help("Acerca de"),
-                 "quota": self.win_quota, "blocked": self.win_blocked,
+                 "quota": self.win_quota, "blocked": self.win_blocked, "store": self.win_tienda,
                  "badge": self.refresh_alert_badge, "quit": self.quit_app}.get(act, lambda: None)()
         except queue.Empty:
             pass
@@ -1306,6 +1309,7 @@ class Floating(tk.Tk):
         m.add_separator()
         m.add_command(label="📅 Cuota mensual de datos…", command=self.win_quota)
         m.add_command(label="🚫 Programas bloqueados…", command=self.win_blocked)
+        m.add_command(label="🛍 Compatibilidad con apps de la Tienda…", command=self.win_tienda)
         m.add_separator()
         m.add_command(label="❓ Ayuda", command=self.win_help)
         m.add_command(label="Acerca de NavTool", command=lambda: self.win_help("Acerca de"))
@@ -1629,6 +1633,7 @@ class Floating(tk.Tk):
         _write_state(PROXY_PORT)
         set_system_proxy(True)
         self.power.config(text=self._power_text(True), bg="#2e8b57")
+        self.after(1500, self._store_hint)
 
     def _restore_proxy(self):
         if not winreg:
@@ -1722,6 +1727,23 @@ class Floating(tk.Tk):
             w.lift()
             return
         self._quota = cuota.QuotaWindow(self, HIST, CFG, save_cfg)
+
+    def win_tienda(self):
+        w = getattr(self, "_tienda", None)
+        if w is not None and w.winfo_exists():
+            w.lift()
+            return
+        self._tienda = tienda.VentanaTienda(self)
+
+    def _store_hint(self):
+        """Una sola vez, sin ventana emergente: avisa de que las apps de la Tienda no pasan por el proxy."""
+        if CFG.get("store_hint"):
+            return
+        CFG["store_hint"] = True
+        save_cfg(CFG)
+        self._notify("Apps de la Tienda de Windows",
+                     "Con el proxy encendido, WhatsApp o la Microsoft Store pueden no conectarse. Solución: clic "
+                     "derecho en la barra → «Compatibilidad con apps de la Tienda…».")
 
     def win_blocked(self):
         w = getattr(self, "_blocked", None)
@@ -2109,6 +2131,12 @@ if __name__ == "__main__":
             lineas.append(f"ERROR de bandeja: {e}")
         lineas.append(f"Idioma: {i18n.idioma()} · packs: {sorted(i18n.paquetes(_idiomas_dirs()))}")
         open(os.path.join(DATA_DIR, "diagnostico.txt"), "w", encoding="utf-8").write(chr(10).join(tr(l) for l in lineas) + chr(10))
+        sys.exit(0)
+    if "--tienda-aplicar" in sys.argv:     # copia elevada (UAC): aplica el pedido del asistente de la Tienda
+        tienda.ejecutar_pedido()
+        sys.exit(0)
+    if "--quitar-exenciones" in sys.argv:  # lo usa el desinstalador
+        tienda.quitar_todas()
         sys.exit(0)
     if "--quitar-bloqueos" in sys.argv:    # lo usa el desinstalador: quita las reglas del cortafuegos
         programas.quitar_todos()

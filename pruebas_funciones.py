@@ -204,5 +204,87 @@ check("Con donaciones válidas aparece la sección opcional", "Apoyar el proyect
 check("Solo se aceptan enlaces https:// (no javascript:)", any("PayPal" in x for x in etiquetas) and not any("Malo" in x for x in etiquetas), str(etiquetas))
 ayuda.CREDITOS["donaciones"] = []; ayuda.CREDITOS["repo"] = ""
 
+
+# ---------------- apps de la Tienda (exención de loopback)
+import tienda
+tienda.configurar(os.path.join(tmp, "datos_tienda")); os.makedirs(os.path.join(tmp, "datos_tienda"))
+WA, ST, EV = "5319275A.WhatsAppDesktop_cv1g1gvanyjgm", "Microsoft.WindowsStore_8wekyb3d8bbwe", "Malo.App_" + "a" * 13
+llamadas = []
+listado = _j.dumps([{"Name": "5319275A.WhatsAppDesktop", "PackageFamilyName": WA},
+                    {"Name": "Microsoft.WindowsStore", "PackageFamilyName": ST},
+                    {"Name": "Otra.App", "PackageFamilyName": "Otra.App_8wekyb3d8bbwe"},
+                    {"Name": "Sin.Formato", "PackageFamilyName": "no valido; calc"}])
+salida_s = ("Lista de exenciones de bucle invertido de aplicaciones\\n\\n    [1] -----------------------------------------------------------------\\n"
+            "        Nombre: microsoft.windowsstore_8wekyb3d8bbwe\\n        SID: S-1-15-2-1\\n")
+
+
+def fake_run(args, timeout=40):
+    llamadas.append(list(args))
+    if "LoopbackExempt" in " ".join(map(str, args)) and "-s" in args:
+        return 0, salida_s
+    if "LoopbackExempt" in " ".join(map(str, args)):
+        return 0, "Aceptar"
+    return 0, listado
+
+
+tienda._run = fake_run
+apps = tienda.apps_instaladas()
+check("Lista las apps instaladas y descarta nombres inválidos", [a["pfn"] for a in apps] == [WA, "Otra.App_8wekyb3d8bbwe", ST][:0] + sorted([WA, ST, "Otra.App_8wekyb3d8bbwe"], key=str.lower) or len(apps) == 3, str([a["pfn"] for a in apps]))
+check("Nunca acepta un nombre con espacios, «;» o comandos", not any(" " in a["pfn"] or ";" in a["pfn"] for a in apps))
+check("Lee las exenciones que ya existen (también en Windows en español)", tienda.exentas() == {ST.lower()})
+check("Expresión de nombres: rechaza inyección y formatos raros", not any(tienda.PFN_RE.match(x) for x in ("a b_" + "a" * 13, "x;calc_" + "a" * 13, "../x_" + "a" * 13, "x_corto", "x_" + "A" * 13, "")))
+tienda.es_admin = lambda: False
+r = tienda.aplicar([WA], [])
+check("Sin administrador no cambia nada", r["ok"] == [] and r["error"] and not any("-a" in c for c in llamadas))
+tienda.es_admin = lambda: True
+llamadas.clear()
+r = tienda.aplicar([WA, EV, "x; calc"], [])
+add = [c for c in llamadas if "-a" in c]
+check("Añade solo lo que está instalado y con argumentos separados (sin shell)", r["ok"] == [WA] and len(add) == 1 and add[0][-1] == f"-n={WA}" and len(r["error"]) == 2, str(add[:1]))
+check("Se apunta lo que hizo NavTool", tienda.gestionadas() == {WA.lower()})
+llamadas.clear()
+r = tienda.aplicar([], [ST, WA])
+rem = [c for c in llamadas if "-d" in c]
+check("Solo quita lo que NavTool creó (nunca una exención ajena)", r["ok"] == [WA] and len(rem) == 1 and any(e[0] == ST for e in r["error"]) and tienda.gestionadas() == set())
+tienda.aplicar([WA], [])
+n_ = tienda.quitar_todas()
+check("Al desinstalar se quitan las de NavTool", n_ == 1 and tienda.gestionadas() == set())
+# pedido elevado
+import json as _jj
+pedido = tienda._cfg["pedido"]
+_jj.dump({"hora": time.time(), "agregar": [WA], "quitar": []}, open(pedido, "w"))
+res = tienda.ejecutar_pedido()
+check("El pedido de la copia elevada se aplica, se borra y deja resultado", res["ok"] == [WA] and not os.path.exists(pedido) and os.path.exists(tienda._cfg["resultado"]))
+_jj.dump({"hora": time.time() - 4000, "agregar": [ST], "quitar": []}, open(pedido, "w"))
+llamadas.clear(); res = tienda.ejecutar_pedido()
+check("Un pedido caducado (más de 5 min) se ignora", res["ok"] == [] and not any("-a" in c for c in llamadas))
+open(pedido, "w").write("{corrupto"); res = tienda.ejecutar_pedido()
+check("Un pedido corrupto no rompe nada", res["ok"] == [])
+tienda._guardar_estado([WA, "x; calc", 5, "../x_" + "a" * 13])
+check("El estado en disco solo conserva nombres válidos", tienda.gestionadas() == {WA.lower()})
+tienda._guardar_estado([])
+# ventana
+tienda.es_admin = lambda: False
+app.win_tienda(); t1 = time.time()
+while time.time() - t1 < 3 and not app._tienda.filas: pump(.1)
+w = app._tienda
+check("La ventana lista las apps y marca las que ya tienen exención", len(w.filas) == 3 and sum(f["exenta"] for f in w.filas.values()) == 1, str(len(w.filas)))
+w.recomendadas()
+marcadas = sorted(f["nombre"] for f in w.filas.values() if f["marcada"])
+check("«Marcar las recomendadas» marca WhatsApp y la Tienda", any("WhatsApp" in x for x in marcadas) and any("WindowsStore" in x for x in marcadas), str(marcadas))
+ajena = next(i for i, f in w.filas.items() if f["exenta"])
+w.tree.event_generate("<Button-1>", x=5, y=5)
+w.filas[ajena]["propia"] = False
+class E_: pass
+ev = E_(); ev.x, ev.y = 5, 5
+w.tree.identify_row = lambda y: ajena; w.tree.identify_column = lambda x: "#1"
+antes = w.filas[ajena]["marcada"]; w._clic(ev)
+check("Una exención ajena no se puede desmarcar desde NavTool", w.filas[ajena]["marcada"] == antes)
+w.destroy()
+# el aviso de una sola vez
+n.CFG["store_hint"] = False; avisos = []
+app._notify = lambda t, m: avisos.append(t); app._store_hint(); app._store_hint()
+check("El aviso de las apps de la Tienda sale una sola vez (sin ventana emergente)", len(avisos) == 1 and n.CFG["store_hint"] is True)
+
 app.quit_app(); shutil.rmtree(tmp, ignore_errors=True)
 print(f"\nRESULTADO: {ok} bien, {fail} fallos")

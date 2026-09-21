@@ -66,12 +66,13 @@ Cada fallo se reprodujo antes de corregirlo y se vuelve a comprobar con `pruebas
 
 ## Versión 1.1: superficies nuevas y hallazgos
 
-Nuevas funciones y cómo se protegieron (comprobado con `pruebas_funciones.py`, 77 pruebas, además de las 52 de `pruebas_seguridad.py`):
+Nuevas funciones y cómo se protegieron (comprobado con `pruebas_funciones.py`, 94 pruebas, además de las 52 de `pruebas_seguridad.py`):
 
 | Función | Riesgo | Medida |
 |---|---|---|
 | **Bloquear un programa** (Cortafuegos de Windows) | Bloquear algo vital o inyectar argumentos en `netsh` | Solo rutas absolutas a un `.exe` existente; nunca componentes de Windows, procesos protegidos ni a NavTool; `netsh` con lista de argumentos (sin shell); reglas con prefijo propio y estado en disco: **no toca reglas ajenas**; confirmación con consecuencias; requiere administrador; reversible (gestor «Bloqueados», caducidad, y el desinstalador las quita). |
 | **Packs de idioma** | Un pack hostil (RTL/controles para disfrazar textos, marcadores que rompan el formato, archivo enorme, código de idioma con ruta) | Solo texto: sin `str.format` ni evaluación; se valida y se guarda una copia **limpia** (controles y marcas RTL fuera, marcadores comprobados, 2 MB / 6.000 entradas máx.); el código de idioma solo admite `xx` o `xx-XX` (no puede escribir fuera de la carpeta). |
+| **Apps de la Tienda** (exención de loopback) | Exentar una app equivocada o inyectar argumentos; un pedido manipulado para la copia elevada | Solo apps **instaladas** (se comprueba justo antes de aplicar); nombre validado con una expresión estricta; `CheckNetIsolation` con argumentos en lista (sin shell); solo se quitan las exenciones que creó NavTool (archivo de estado validado); el pedido para la copia con administrador caduca a los 5 minutos y se borra; confirmación previa; el desinstalador las quita. Riesgo residual: otro programa **del mismo usuario** podría escribir un pedido, pero solo lograría exentar de loopback una app ya instalada. |
 | **Cuota mensual** | Datos falsos o avisos repetidos | Usa los contadores de la tarjeta de red; un aviso por umbral y ciclo; configuración saneada. |
 | **Créditos / donaciones** | Enlaces peligrosos en `creditos.json` | Solo se muestran enlaces `https://`; nada aparece si no está configurado. |
 
@@ -111,7 +112,7 @@ Ambas se generan con un solo comando: `powershell -ExecutionPolicy Bypass -File 
 
 ```bash
 python pruebas_seguridad.py                      # 52 pruebas: ataques + regresión (usa carpetas temporales)
-python pruebas_funciones.py                      # 77 pruebas: cuota, bloqueo de programas, idiomas, créditos
+python pruebas_funciones.py                      # 94 pruebas: cuota, bloqueo de programas, apps de la Tienda, idiomas, créditos
 python -m pip_audit -r requirements.txt          # dependencias con vulnerabilidades conocidas
 python -m bandit -r . -ll --exclude ./dist,./build   # análisis estático (severidad media y alta)
 ```

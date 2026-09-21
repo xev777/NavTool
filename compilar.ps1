@@ -26,7 +26,7 @@ python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon nav
     --hidden-import history_view --hidden-import watcher --hidden-import tray `
     --hidden-import proxy_core --hidden-import safety --hidden-import tooltip `
     --hidden-import ayuda --hidden-import i18n --hidden-import cuota --hidden-import programas `
-    --hidden-import blocklists --hidden-import pcap --hidden-import netparse `
+    --hidden-import blocklists --hidden-import pcap --hidden-import netparse --hidden-import tienda `
     --hidden-import psutil navtool.py
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló" }
 

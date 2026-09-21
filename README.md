@@ -14,6 +14,7 @@ how pages load, who tracks you, and which programs use your network. Works with 
 | **Block lists** | Built-in list plus optional Peter Lowe / StevenBlack lists, personal list and exceptions. |
 | **Network monitor** | Every program, who it talks to, how much it moves. Npcap capture, exact totals. |
 | **Block a program** | Right-click a program in the monitor → Windows Firewall rules (1 h / 4 h / until you unblock). |
+| **Store apps compatibility** | WhatsApp / Microsoft Store and other Store apps work with the proxy on (Windows loopback exemption, one click). |
 | **Monthly data quota** | Set your plan and billing day: usage, projection and warnings at 80 % / 100 %. |
 | **History and alerts** | Per-minute usage, per-program usage, new programs, sustained uploads. Kept on your PC only. |
 | **Search bar** | Up to 5 search engines, one keystroke to search in all. |
@@ -51,7 +52,7 @@ powershell -ExecutionPolicy Bypass -File .\compilar.ps1
 
 ```powershell
 python pruebas_seguridad.py    # 52 attack + regression tests (proxy, packet parser, downloads…)
-python pruebas_funciones.py    # quota, program blocking, language packs, credits
+python pruebas_funciones.py    # quota, program blocking, Store apps, language packs, credits
 python -m pip_audit -r requirements.txt
 python -m bandit -r . -ll --exclude ./dist,./build
 ```
@@ -61,6 +62,7 @@ python -m bandit -r . -ll --exclude ./dist,./build
 * [SEGURIDAD.md](SEGURIDAD.md) — security audit, attacks reproduced, residual risks *(Spanish)*.
 * [MEDICION.md](MEDICION.md) — does blocking ads save data? Measured. *(Spanish)*
 * [TRADUCIR.md](TRADUCIR.md) — how to add a language.
+* [CHANGELOG.md](CHANGELOG.md) — what changed in each version.
 * [LICENCIAS-TERCEROS.md](LICENCIAS-TERCEROS.md) — third-party components and license notes.
 
 ## Contributing
