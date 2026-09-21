@@ -286,5 +286,17 @@ n.CFG["store_hint"] = False; avisos = []
 app._notify = lambda t, m: avisos.append(t); app._store_hint(); app._store_hint()
 check("El aviso de las apps de la Tienda sale una sola vez (sin ventana emergente)", len(avisos) == 1 and n.CFG["store_hint"] is True)
 
+
+# ---------------- Defender: patrones que se han comportado como malware
+import glob as _glob
+malos = []
+for f in _glob.glob(os.path.join(AQUI, "*.py")):
+    if os.path.basename(f).startswith("pruebas_"):
+        continue
+    for i, ln in enumerate(open(f, encoding="utf-8").read().splitlines(), 1):
+        if "ShellExecuteW" in ln and '"runas"' in ln and re.search(r",\s*0\)\s*>\s*32", ln):
+            malos.append(f"{os.path.basename(f)}:{i}")
+check("Ninguna elevación (runas) se lanza con la ventana OCULTA (Defender lo marca como malware)", not malos, str(malos))
+
 app.quit_app(); shutil.rmtree(tmp, ignore_errors=True)
 print(f"\nRESULTADO: {ok} bien, {fail} fallos")

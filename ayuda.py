@@ -9,7 +9,7 @@ import webbrowser
 from i18n import tr
 from safety import monitor_work_area
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 BG, PANEL, FG, MUTED, ACC = "#1b2a41", "#0f1a2b", "#e8eef7", "#8ea3bd", "#3fa9f5"
 CREDITOS = {"autor": "Fernando", "repo": "", "licencia": "", "donaciones": []}
 try:        # creditos.json (junto a la app): autor, enlace del código fuente y donaciones opcionales

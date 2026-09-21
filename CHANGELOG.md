@@ -1,5 +1,19 @@
 # Changelog / Registro de cambios
 
+## 1.1.2 — 2026-09-21
+
+**Fixes / Correcciones**
+- **Microsoft Defender flagged NavTool 1.1.1 as malware** (`Behavior:Win32/Impact.A!ml`) and quarantined `NavTool.exe` right after
+  installing. Cause: the Store-apps wizard relaunched NavTool **elevated with a hidden window**, a pattern antivirus engines
+  associate with malware. It now uses a normal (visible) elevation prompt. Bisected by building 1.1 (clean), 1.1.1 (flagged) and
+  1.1.1 with only that change (clean).
+  / **Defender marcó la 1.1.1 como malware** y puso `NavTool.exe` en cuarentena tras instalar. Causa: el asistente de la Tienda
+  relanzaba NavTool con permisos elevados y **ventana oculta**. Ahora usa el aviso de administrador normal.
+- **The build now scans the executable with Defender and refuses to continue if it is flagged**, and a test forbids hidden
+  elevations. / **La compilación analiza el ejecutable con Defender y se detiene si lo marca**; una prueba prohíbe elevaciones ocultas.
+- **If you installed 1.1.1:** uninstall it (Start menu → NavTool → Uninstall, or Settings → Apps), reboot the shortcut leftovers,
+  and install 1.1.2. / **Si instalaste la 1.1.1:** desinstálala e instala la 1.1.2.
+
 ## 1.1.1 — 2026-09-21
 
 **New / Novedades**

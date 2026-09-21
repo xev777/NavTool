@@ -30,6 +30,15 @@ python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon nav
     --hidden-import psutil navtool.py
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló" }
 
+# 1b) Antes de seguir: Microsoft Defender no debe marcar el ejecutable. Si lo marca, NO se publica (los usuarios
+#     recibirían un «malware» en cuarentena: pasó con la 1.1.1). -DisableRemediation: solo analiza, no borra.
+$mp = "$env:ProgramFiles\Windows Defender\MpCmdRun.exe"
+if (Test-Path $mp) {
+    $res = & $mp -Scan -ScanType 3 -File "$PSScriptRoot\dist\NavTool\NavTool.exe" -DisableRemediation 2>&1 | Out-String
+    if ($res -notmatch "found no threats|no se encontraron amenazas") { throw "Defender marca NavTool.exe como amenaza:`n$res`nNo se publica. Revisa los cambios recientes (ver CHANGELOG 1.1.2)." }
+    Write-Host "Defender: sin amenazas" -ForegroundColor Green
+}
+
 # 2) Instalador con Inno Setup (inglés por defecto, con opción de español)
 $iscc = @("$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
           "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",

@@ -159,7 +159,9 @@ def pedir_cambios(agregar, quitar):
         exe, args = sys.executable, "--tienda-aplicar"
     else:
         exe, args = sys.executable, f'"{os.path.abspath(sys.argv[0])}" --tienda-aplicar'
-    return ctypes.windll.shell32.ShellExecuteW(None, "runas", exe, args, None, 0) > 32
+    # SW_SHOWNORMAL (1), NO oculto (0): relanzarse a sí mismo con permisos elevados y sin ventana es justo el
+    # patrón que Microsoft Defender clasifica como malware (Behavior:Win32/Impact.A!ml en la 1.1.1).
+    return ctypes.windll.shell32.ShellExecuteW(None, "runas", exe, args, None, 1) > 32
 
 
 def ejecutar_pedido():
