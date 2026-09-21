@@ -23,6 +23,10 @@ how pages load, who tracks you, and which programs use your network. Works with 
 
 Everything runs locally. **No telemetry, no accounts, no automatic updates.**
 
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/) *(application in progress: until it is approved, releases are unsigned)*. See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) and the [privacy policy](PRIVACY.md).
+
 ## Install
 
 Download from the [Releases](../../releases) page:

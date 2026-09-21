@@ -21,3 +21,6 @@ mediciones/cache_listas/
 .idea/
 Thumbs.db
 *.tmp
+
+# generated during the build
+version_info.txt

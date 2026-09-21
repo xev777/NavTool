@@ -6,14 +6,21 @@
 ; {app}\idioma.txt y es el idioma inicial de la aplicación (luego se cambia desde la propia barra).
 
 #define AppName "NavTool"
-#define AppVersion "1.1.2"
+#define AppVersion "1.1.3"
 #define AppExe "NavTool.exe"
 
 [Setup]
 AppId={{6F3B2C1A-8D47-4E52-9A0B-3C7E5D1F4A96}
 AppName={#AppName}
 AppVersion={#AppVersion}
-AppPublisher=NavTool
+AppPublisher=Fernando Erazo
+AppPublisherURL=https://github.com/xev777/NavTool
+AppSupportURL=https://github.com/xev777/NavTool/issues
+VersionInfoVersion={#AppVersion}.0
+VersionInfoCompany=Fernando Erazo
+VersionInfoProductName=NavTool
+VersionInfoDescription=NavTool installer
+VersionInfoCopyright=Copyright (C) 2026 Fernando Erazo. GNU GPL v3.
 DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes

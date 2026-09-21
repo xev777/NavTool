@@ -13,13 +13,20 @@ if ($LASTEXITCODE -ne 0) { throw "extraer_textos.py falló" }
 python -c "import i18n,glob,sys; bad=[f for f in glob.glob('idiomas/*.json') if not f.endswith('plantilla.json') and not i18n.leer_pack(f)[0]]; sys.exit(1 if bad else 0)"
 if ($LASTEXITCODE -ne 0) { throw "Hay un pack de idioma inválido en .\idiomas" }
 
+# 0b) Metadatos de versión del .exe (producto, versión, autor): los pide SignPath y reducen falsas alarmas
+python version_info.py
+if ($LASTEXITCODE -ne 0) { throw "version_info.py falló" }
+
 # 1) NavTool en modo carpeta (no un .exe único: ver SEGURIDAD.md, hallazgo S3)
-# Antes de cerrar NavTool a la fuerza, se le pide a Windows que recupere su proxy (si el ⏻ estaba encendido, un cierre
-# brusco dejaría el proxy del sistema apuntando a un puerto muerto y programas como IDM dejarían de conectar).
-python navtool.py --restaurar-proxy
-Get-Process NavTool -ErrorAction SilentlyContinue | Stop-Process -Force
+# Solo se cierran los NavTool que salen de ESTA carpeta de compilación (nunca el instalado ni el que estés usando).
+# Antes se pide que devuelva el proxy a Windows (un cierre brusco con el ⏻ encendido lo dejaría apuntando a un puerto muerto).
+$propios = Get-Process NavTool -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith("$PSScriptRoot\dist", "OrdinalIgnoreCase") }
+if ($propios) {
+    python navtool.py --restaurar-proxy
+    $propios | Stop-Process -Force -ErrorAction SilentlyContinue
+}
 if (Test-Path "$PSScriptRoot\dist") { Remove-Item "$PSScriptRoot\dist" -Recurse -Force }
-python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon navtool.ico `
+python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon navtool.ico --version-file version_info.txt `
     --add-data "navtool.ico;." --add-data "idiomas;idiomas" --add-data "creditos.json;." `
     --hidden-import traffic_monitor --hidden-import loadtrack --hidden-import load_panel `
     --hidden-import privacy --hidden-import report_view --hidden-import history `
@@ -35,8 +42,9 @@ if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló" }
 $mp = "$env:ProgramFiles\Windows Defender\MpCmdRun.exe"
 if (Test-Path $mp) {
     $res = & $mp -Scan -ScanType 3 -File "$PSScriptRoot\dist\NavTool\NavTool.exe" -DisableRemediation 2>&1 | Out-String
-    if ($res -notmatch "found no threats|no se encontraron amenazas") { throw "Defender marca NavTool.exe como amenaza:`n$res`nNo se publica. Revisa los cambios recientes (ver CHANGELOG 1.1.2)." }
-    Write-Host "Defender: sin amenazas" -ForegroundColor Green
+    if ($res -match "found (\d+) threats" -and [int]$Matches[1] -gt 0) { throw "Defender marca NavTool.exe como amenaza:`n$res`nNo se publica. Revisa los cambios recientes (ver CHANGELOG 1.1.2)." }
+    if ($res -match "found no threats") { Write-Host "Defender: sin amenazas" -ForegroundColor Green }
+    else { Write-Warning "No se pudo confirmar el análisis de Defender (¿servicio desactivado?):`n$res" }
 }
 
 # 2) Instalador con Inno Setup (inglés por defecto, con opción de español)

@@ -23,6 +23,10 @@ cómo cargan las páginas, quién te rastrea y qué programas usan tu red. Funci
 
 Todo se ejecuta en tu equipo. **Sin telemetría, sin cuentas, sin actualizaciones automáticas.**
 
+## Firma de código
+
+Firma de código gratuita proporcionada por [SignPath.io](https://about.signpath.io/), certificado de [SignPath Foundation](https://signpath.org/) *(solicitud en trámite: hasta que se apruebe, las versiones no están firmadas)*. Ver [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) y la [política de privacidad](PRIVACY.md).
+
 ## Instalación
 
 Descarga desde la página de [Releases](../../releases):

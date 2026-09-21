@@ -1,0 +1,50 @@
+name: Build
+
+# Compila NavTool en los servidores de GitHub (no en un PC personal): así cada binario se puede verificar contra este
+# repositorio, condición necesaria para la firma gratuita de SignPath Foundation.
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build (PyInstaller + installer + portable zip)
+        shell: powershell
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\compilar.ps1
+
+      - name: Hashes
+        shell: powershell
+        run: Get-FileHash Output\*.exe, Output\*.zip -Algorithm SHA256 | Format-Table Hash, @{n="File";e={Split-Path $_.Path -Leaf}} -AutoSize
+
+      - name: Upload build artifacts
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: navtool-windows
+          path: |
+            Output/*.exe
+            Output/*.zip
+          if-no-files-found: error
+
+      # Cuando SignPath Foundation apruebe el proyecto se añade aquí el paso de firma
+      # (signpath/github-action-submit-signing-request) usando el artefacto anterior. Ver CODE_SIGNING_POLICY.md.

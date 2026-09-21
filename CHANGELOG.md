@@ -1,5 +1,15 @@
 # Changelog / Registro de cambios
 
+## 1.1.3 — unreleased / sin publicar
+
+**Preparing code signing / Preparando la firma de código**
+- Builds now run on GitHub Actions (`.github/workflows/build.yml`), a requirement of the SignPath Foundation free signing program.
+  / Las compilaciones se hacen en GitHub Actions (requisito de la firma gratuita de SignPath Foundation).
+- The executable and installer carry version metadata (product, version, author, license). / El ejecutable y el instalador llevan metadatos de versión.
+- New `CODE_SIGNING_POLICY.md` and `PRIVACY.md`. / Nuevas políticas de firma y de privacidad.
+- `compilar.ps1` never closes the NavTool you have installed or running (only the one from its own build folder).
+  / `compilar.ps1` ya no cierra el NavTool que tengas instalado o en uso.
+
 ## 1.1.2 — 2026-09-21
 
 **Fixes / Correcciones**
