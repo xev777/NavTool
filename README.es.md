@@ -70,3 +70,8 @@ términos de la **Licencia Pública General de GNU versión 3** (ver [LICENSE](L
 
 Diseño y desarrollo: Fernando Erazo ([@xev777](https://github.com/xev777)). Asistencia de programación: Claude (Anthropic).
 Componentes de terceros: Npcap (lo instala el usuario), psutil, Python/Tkinter. Ver [LICENCIAS-TERCEROS.md](LICENCIAS-TERCEROS.md).
+
+## Apoyar el proyecto
+
+NavTool es gratuito y lo seguirá siendo. Si te resulta útil, puedes apoyar su desarrollo por PayPal
+(xev667@hotmail.com) — totalmente opcional, y también disponible desde el «Acerca de» de la app.

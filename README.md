@@ -84,3 +84,8 @@ useful, but **without any warranty**.
 
 Design and development: Fernando Erazo ([@xev777](https://github.com/xev777)). Programming assistance: Claude (Anthropic).
 Third-party components: Npcap (user-installed), psutil, Python/Tkinter. See [LICENCIAS-TERCEROS.md](LICENCIAS-TERCEROS.md).
+
+## Support the project
+
+NavTool is free and always will be. If it's useful to you, you can support its development via PayPal
+(xev667@hotmail.com) — entirely optional, and also available from the app's About screen.

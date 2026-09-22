@@ -10,6 +10,10 @@
 - `compilar.ps1` never closes the NavTool you have installed or running (only the one from its own build folder).
   / `compilar.ps1` ya no cierra el NavTool que tengas instalado o en uso.
 
+**New / Novedades**
+- Optional donation link (PayPal) in the About screen and the README — off unless configured, never shown as a
+  pop-up. / Enlace de donación opcional (PayPal) en «Acerca de» y el README — apagado salvo que se configure, nunca en una ventana emergente.
+
 ## 1.1.2 — 2026-09-21
 
 **Fixes / Correcciones**
