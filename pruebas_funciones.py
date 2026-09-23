@@ -298,5 +298,22 @@ for f in _glob.glob(os.path.join(AQUI, "*.py")):
             malos.append(f"{os.path.basename(f)}:{i}")
 check("Ninguna elevación (runas) se lanza con la ventana OCULTA (Defender lo marca como malware)", not malos, str(malos))
 
+# ---------------- recuperar la barra si queda fuera de la pantalla (p. ej. al quitar un monitor)
+app.geometry("+50000+50000")           # posición imposible: ningún monitor real llega ahí
+n.CFG["bar_dock"] = "top"
+app._acts.put("reset_position")
+app._poll_acts()
+app.update_idletasks()
+mx, my = app.winfo_x(), app.winfo_y()
+left, top, right, bottom = n.monitor_work_area(0, 0)
+check("«Restaurar posición» devuelve la barra al monitor principal, visible y sin anclar",
+      left <= mx <= right and top <= my <= bottom and n.CFG["bar_dock"] is None
+      and app.state() != "withdrawn")
+import tray as _tray
+tr_test = _tray.Tray("x.ico", lambda a: None, lambda: {"proxy_on": False, "unseen": 0, "has_report": False,
+                                                        "autostart": False, "can_autostart": False})
+check("El menú de la bandeja incluye la opción de restaurar posición",
+      any(item and item[1] == "reset_position" for item in tr_test._items()))
+
 app.quit_app(); shutil.rmtree(tmp, ignore_errors=True)
 print(f"\nRESULTADO: {ok} bien, {fail} fallos")

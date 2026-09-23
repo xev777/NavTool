@@ -505,6 +505,7 @@
   "Página limpia: no contactó con rastreadores conocidos.": "Clean page: it did not contact known trackers.",
   "Contactó con {} rastreador(es), pero NavTool los bloqueó todos.": "It contacted {} tracker(s), but NavTool blocked them all.",
   "Mostrar / ocultar barra": "Show / hide bar",
+  "Restaurar posición de la barra (si no se ve)": "Reset bar position (if it's not visible)",
   "Contraer / expandir barra": "Collapse / expand bar",
   "Barra: cambiar tamaño (grande / compacto)": "Bar: change size (large / compact)",
   "📡 Tráfico de red": "📡 Network traffic",

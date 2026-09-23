@@ -1,6 +1,19 @@
 # Changelog / Registro de cambios
 
-## 1.1.3 — unreleased / sin publicar
+## 1.1.4 — 2026-09-23
+
+**Fixes / Correcciones**
+- **The bar could open off-screen and get stuck there** if its last position was on a monitor that is no longer
+  connected (e.g. after undocking a laptop or unplugging an external display) — it looked as if NavTool had
+  frozen or wasn't opening. The tray menu now has **"Reset bar position"**, which brings it back to the main
+  monitor, and showing the bar (from the tray icon or from another launch) now re-checks that its position is
+  still on a connected monitor. / **La barra podía abrirse fuera de la pantalla y quedarse así** si su última
+  posición estaba en un monitor ya desconectado (por ejemplo, al quitar una pantalla externa) — parecía que
+  NavTool se había colgado o no abría. El menú de la bandeja ahora tiene **"Restaurar posición de la barra"**,
+  que la trae de vuelta al monitor principal, y mostrar la barra (desde la bandeja o al abrir NavTool de nuevo)
+  ahora comprueba que su posición sigue estando en un monitor conectado.
+
+## 1.1.3 — 2026-09-21
 
 **Preparing code signing / Preparando la firma de código**
 - Builds now run on GitHub Actions (`.github/workflows/build.yml`), a requirement of the SignPath Foundation free signing program.

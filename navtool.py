@@ -719,6 +719,7 @@ class Floating(tk.Tk):
                     act()
                     continue
                 {"toggle_bar": self.toggle_bar, "show_bar": self.show_bar,
+                 "reset_position": self.reset_bar_position,
                  "toggle_collapse": self.toggle_collapse, "toggle_size": self.toggle_size,
                  "toggle_autostart": self.toggle_autostart,
                  "toggle_proxy": self.toggle_proxy, "traffic": self.win_traffic,
@@ -745,6 +746,7 @@ class Floating(tk.Tk):
         self.deiconify()
         self.attributes("-topmost", True)
         self.lift()
+        self._clamp_on_screen()        # por si el monitor donde estaba ya no está conectado
 
     def hide_bar(self):
         if self.panel is not None and self.panel.winfo_exists():
@@ -754,6 +756,20 @@ class Floating(tk.Tk):
 
     def toggle_bar(self):
         self.show_bar() if self.state() == "withdrawn" else self.hide_bar()
+
+    def reset_bar_position(self):
+        """Trae la barra a una posición visible del monitor principal. Recupera la barra si quedó
+        fuera de la pantalla, por ejemplo tras desconectar el monitor donde estaba."""
+        CFG["bar_dock"] = None
+        self._dock_pending = None
+        self.update_idletasks()
+        w = self.winfo_reqwidth()
+        left, top, right, _bottom = monitor_work_area(0, 0)     # (0, 0) siempre está en el monitor principal
+        x, y = left + max(0, (right - left - w) // 2), top + 8
+        self.geometry(f"+{x}+{y}")
+        CFG["bar_x"], CFG["bar_y"] = x, y
+        save_cfg(CFG)
+        self.show_bar()
 
     def _notify(self, title, message):
         """Llamado desde el vigilante (otro hilo): aviso junto al reloj y actualiza el contador."""

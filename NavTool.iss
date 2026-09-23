@@ -6,7 +6,7 @@
 ; {app}\idioma.txt y es el idioma inicial de la aplicación (luego se cambia desde la propia barra).
 
 #define AppName "NavTool"
-#define AppVersion "1.1.3"
+#define AppVersion "1.1.4"
 #define AppExe "NavTool.exe"
 
 [Setup]

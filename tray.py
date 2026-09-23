@@ -87,6 +87,7 @@ class Tray:
         n = s["unseen"]
         return [
             (tr("Mostrar / ocultar barra"), "toggle_bar", True, None, True),
+            (tr("Restaurar posición de la barra (si no se ve)"), "reset_position", False, None, True),
             (tr("Contraer / expandir barra"), "toggle_collapse", False, None, True),
             (tr("Barra: cambiar tamaño (grande / compacto)"), "toggle_size", False, None, True),
             (tr("Desactivar proxy (⏻ ON)") if s["proxy_on"] else tr("Activar proxy (⏻ OFF)"),
