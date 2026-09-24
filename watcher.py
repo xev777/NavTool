@@ -53,7 +53,7 @@ class Watcher(threading.Thread):
         self.minute = None
         self.acc_d = self.acc_u = 0
         self.eng_last = {}
-        self.next_scan = self.next_touch = self.next_quota = self.next_expire = 0.0
+        self.next_scan = self.next_touch = self.next_quota = self.next_expire = self.next_telemetry = 0.0
 
     # ---- ciclo principal
     def run(self):
@@ -70,6 +70,9 @@ class Watcher(threading.Thread):
                 if now >= self.next_scan:
                     self.next_scan = now + SCAN_EVERY
                     self.scan()
+                if now >= self.next_telemetry:
+                    self.next_telemetry = now + SCAN_EVERY
+                    self.check_telemetry()
                 if now >= self.next_touch:
                     self.next_touch = now + TOUCH_EVERY
                     self.flush_touch()
@@ -188,6 +191,21 @@ class Watcher(threading.Thread):
         except Exception:
             pass
         return True
+
+    def check_telemetry(self):
+        """Programas que hablan con un servidor de telemetría/diagnóstico conocido (requiere el
+        monitoreo por programa, Npcap). Solo registra: no bloquea nada. `alert()` ya evita repetir
+        el mismo programa antes de que pasen COOLDOWN segundos."""
+        eng = self.get_engine()
+        if not eng:
+            return
+        for r in eng.snapshot()["rows"]:
+            if r["cat"] != "telemetry" or not r["active"]:
+                continue
+            dest = r["host"] + (f" ({r['company']})" if r["company"] else "")
+            self.alert("telemetry", f"{r['proc']} envió telemetría a {dest}",
+                       f"{r['proc']} se conectó con {dest}, un servidor de telemetría/diagnóstico "
+                       "conocido. NavTool solo lo registra: no bloquea la conexión.", r["proc"])
 
     def check_upload(self, up_bytes):
         self.up_win.append(up_bytes)

@@ -684,6 +684,19 @@
   "Con el proxy encendido, WhatsApp o la Microsoft Store pueden no conectarse. Solución: clic derecho en la barra → «Compatibilidad con apps de la Tienda…».": "With the proxy on, WhatsApp or the Microsoft Store may fail to connect. Fix: right-click the bar → “Microsoft Store apps compatibility…”.",
   "🛍 Compatibilidad con apps de la Tienda…": "🛍 Microsoft Store apps compatibility…",
   "🛍 Compatibilidad con apps de la Tienda": "🛍 Microsoft Store apps compatibility",
-  "Con el proxy encendido, WhatsApp o la Microsoft Store (apps de la Tienda) no conectan: es una restricción de Windows. Clic derecho en la barra → «Compatibilidad con apps de la Tienda…» y marca esas apps.": "With the proxy on, WhatsApp or the Microsoft Store (Store apps) do not connect: it is a Windows restriction. Right-click the bar → “Microsoft Store apps compatibility…” and check those apps."
+  "Con el proxy encendido, WhatsApp o la Microsoft Store (apps de la Tienda) no conectan: es una restricción de Windows. Clic derecho en la barra → «Compatibilidad con apps de la Tienda…» y marca esas apps.": "With the proxy on, WhatsApp or the Microsoft Store (Store apps) do not connect: it is a Windows restriction. Right-click the bar → “Microsoft Store apps compatibility…” and check those apps.",
+  "📊 Telemetría detectada": "📊 Detected telemetry",
+  "Telemetría / diagnóstico": "Telemetry / diagnostics",
+  "{} envió telemetría/diagnóstico a: {}": "{} sent telemetry/diagnostics to: {}",
+  "Es un servidor de telemetría/diagnóstico conocido: NavTool lo registra, no lo bloquea.": "It's a known telemetry/diagnostics server: NavTool logs it, it doesn't block it.",
+  "Este es un servidor de telemetría/diagnóstico conocido: el programa envía datos de uso o de fallos a su fabricante. NavTool solo lo registra en 📊 Telemetría detectada; no corta la conexión.": "This is a known telemetry/diagnostics server: the program sends usage or crash data to its maker. NavTool only logs it in 📊 Detected telemetry; it does not cut the connection.",
+  "{} envió telemetría a {}": "{} sent telemetry to {}",
+  "{} se conectó con {}, un servidor de telemetría/diagnóstico conocido. NavTool solo lo registra: no bloquea la conexión.": "{} connected to {}, a known telemetry/diagnostics server. NavTool only logs it: it does not block the connection.",
+  "NavTool – Telemetría detectada": "NavTool – Detected telemetry",
+  "NavTool anota aquí cuándo un programa de este equipo contacta con un servidor de telemetría/diagnóstico conocido: informes de fallos, estadísticas de uso u otros datos que un programa envía a su fabricante. Solo lo registra: no bloquea la conexión ni el programa. Necesita el monitoreo por programa activado (🕘 Historial y alertas → pestaña Alertas).": "NavTool notes here whenever a program on this computer contacts a known telemetry/diagnostics server: crash reports, usage statistics or other data a program sends to its maker. It only logs it: it doesn't block the connection or the program. It needs per-program monitoring turned on (🕘 History and alerts → Alerts tab).",
+  "Qué se detectó": "What was detected",
+  "Quita el aviso de «nuevas» de esta lista. Las detecciones se conservan.": "Clears the “new” flag on this list. Detections are kept.",
+  "{} detección(es)": "{} detection(s)",
+  "Sin detecciones todavía. Necesita el monitoreo por programa (Npcap).": "No detections yet. It needs per-program monitoring (Npcap)."
  }
 }

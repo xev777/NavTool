@@ -67,12 +67,12 @@ SERVICES = {
 CATEGORY_COLOR = {
     "web": "#6cc0ff", "dns": "#c39bff", "local": "#8fa0b5", "ads": "#ff6b6b",
     "mail": "#ffd166", "remote": "#ff9f43", "system": "#7fd6a6", "other": "#e8eef7",
-    "inbound": "#ff9f43",
+    "inbound": "#ff9f43", "telemetry": "#c9a227",
 }
 CATEGORY_NAME = {
     "web": "Navegación / internet", "dns": "Nombres (DNS)", "local": "Red local",
     "ads": "Publicidad / rastreo", "mail": "Correo", "remote": "Acceso remoto / VPN",
-    "system": "Sistema", "other": "Otro", "inbound": "Entrante",
+    "system": "Sistema", "other": "Otro", "inbound": "Entrante", "telemetry": "Telemetría / diagnóstico",
 }
 
 COMPANIES = [
@@ -98,7 +98,31 @@ COMPANIES = [
     (("steampowered.com", "steamcontent.com", "valvesoftware.com"), "Steam"),
 ]
 
+# Servidores conocidos de telemetría/diagnóstico: un programa que contacta con ellos está enviando
+# datos de uso, fallos o rendimiento a su fabricante, no navegando ni sincronizando contenido.
+# Lista no exhaustiva, pensada para avisar de lo más común, no para bloquear.
+TELEMETRY = (
+    "vortex.data.microsoft.com", "vortex-win.data.microsoft.com", "settings-win.data.microsoft.com",
+    "watson.telemetry.microsoft.com", "watson.ppe.telemetry.microsoft.com", "telemetry.microsoft.com",
+    "telecommand.telemetry.microsoft.com", "oca.telemetry.microsoft.com", "oca.microsoft.com",
+    "wes.df.telemetry.microsoft.com", "sqm.telemetry.microsoft.com", "survey.watson.microsoft.com",
+    "watson.microsoft.com", "self.events.data.microsoft.com", "browser.events.data.msn.com",
+    "eu-mobile.events.data.microsoft.com", "us-mobile.events.data.microsoft.com",
+    "diagnostics.support.microsoft.com", "functional.events.data.microsoft.com",
+    "metrics.icloud.com", "diagassets.apple.com", "gs-loc.apple.com",
+    "sentry.io", "bugsnag.com", "crashlytics.com", "firebase-settings.crashlytics.com",
+    "app-measurement.com", "mixpanel.com", "amplitude.com", "segment.io", "segment.com",
+    "appsflyer.com", "adjust.com", "branch.io", "fullstory.com", "heap.io",
+    "newrelic.com", "nr-data.net", "datadoghq.com", "hockeyapp.net", "appcenter.ms",
+    "google-analytics.com", "analytics.google.com", "clarity.ms", "app-analytics-services.com",
+)
+
 SPARK = "▁▂▃▄▅▆▇█"
+
+
+def is_telemetry(host):
+    h = (host or "").lower()
+    return any(h == s or h.endswith("." + s) for s in TELEMETRY)
 
 
 def company_of(host):
@@ -722,6 +746,8 @@ class Engine:
                              f"(puerto {f.lport}) — {svc}", "inbound")
         elif self.is_ad(c.host):
             self._event("🚫", f"{who} contactó con un servidor de publicidad/rastreo: {dest}", "ads")
+        elif is_telemetry(c.host):
+            self._event("📊", f"{who} envió telemetría/diagnóstico a: {dest}", "telemetry")
         else:
             self._event("↗", f"{who} se conectó con {dest} — {svc}", "web")
 
@@ -737,6 +763,8 @@ class Engine:
                     cat = "ads"
                 elif c.inbound:
                     cat = "inbound"
+                elif is_telemetry(host):
+                    cat = "telemetry"
                 rows.append({
                     "id": c.id, "proc": c.proc, "path": self.procpath.get(c.proc, ""), "host": host, "company": company_of(host),
                     "ip": c.ip, "owner": self.owner.get(c.ip) or "", "proto": c.proto, "port": c.svc_port, "service": svc,
@@ -1141,6 +1169,8 @@ class TrafficWindow(tk.Toplevel):
             text += "\n⚠ ENTRANTE: alguien de fuera contactó con este programa."
         if r["cat"] == "ads":
             text += "\nEstá en tu lista de publicidad / rastreo."
+        if r["cat"] == "telemetry":
+            text += "\nEs un servidor de telemetría/diagnóstico conocido: NavTool lo registra, no lo bloquea."
         return text + "\n(Doble clic: detalle completo)"
 
     def _fill_tree(self, rows):
@@ -1296,6 +1326,10 @@ class TrafficWindow(tk.Toplevel):
         if r["cat"] == "ads":
             lines += [("", ""), ("Este dominio está en tu lista de publicidad/rastreo. Puedes "
                                  "bloquearlo desde NavTool > Filtros.", "m")]
+        if r["cat"] == "telemetry":
+            lines += [("", ""), ("Este es un servidor de telemetría/diagnóstico conocido: el programa "
+                                 "envía datos de uso o de fallos a su fabricante. NavTool solo lo "
+                                 "registra en 📊 Telemetría detectada; no corta la conexión.", "m")]
         if r["inbound"]:
             lines += [("", ""), ("Una conexión ENTRANTE es alguien de fuera hablando con tu "
                                  "equipo. Es normal en juegos, torrents o compartir archivos; "

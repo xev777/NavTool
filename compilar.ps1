@@ -34,7 +34,7 @@ python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon nav
     --hidden-import proxy_core --hidden-import safety --hidden-import tooltip `
     --hidden-import ayuda --hidden-import i18n --hidden-import cuota --hidden-import programas `
     --hidden-import blocklists --hidden-import pcap --hidden-import netparse --hidden-import tienda `
-    --hidden-import psutil navtool.py
+    --hidden-import telemetria --hidden-import psutil navtool.py
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló" }
 
 # 1b) Antes de seguir: Microsoft Defender no debe marcar el ejecutable. Si lo marca, NO se publica (los usuarios

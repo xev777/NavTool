@@ -15,6 +15,7 @@ cómo cargan las páginas, quién te rastrea y qué programas usan tu red. Funci
 | **Monitor de red** | Cada programa, con quién habla, cuánto mueve. Captura con Npcap, totales exactos. |
 | **Bloquear un programa** | Clic derecho en el monitor → reglas del Cortafuegos de Windows (1 h / 4 h / hasta desbloquear). |
 | **Apps de la Tienda** | WhatsApp, Microsoft Store y otras apps de la Tienda funcionan con el proxy encendido (exención de loopback de Windows, con un clic). |
+| **Detector de telemetría** | Avisa cuando un programa de tu PC contacta con un servidor de telemetría/diagnóstico conocido (fallos, estadísticas de uso). Lo registra en su propio historial — nunca lo bloquea. |
 | **Cuota mensual** | Define tu plan y el día de corte: consumo, proyección y avisos al 80 % / 100 %. |
 | **Historial y alertas** | Consumo por minuto y por programa, programas nuevos, subidas sostenidas. Solo en tu PC. |
 | **Buscador** | Hasta 5 motores, una tecla para buscar en todos. |

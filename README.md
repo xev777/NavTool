@@ -15,6 +15,7 @@ how pages load, who tracks you, and which programs use your network. Works with 
 | **Network monitor** | Every program, who it talks to, how much it moves. Npcap capture, exact totals. |
 | **Block a program** | Right-click a program in the monitor → Windows Firewall rules (1 h / 4 h / until you unblock). |
 | **Store apps compatibility** | WhatsApp / Microsoft Store and other Store apps work with the proxy on (Windows loopback exemption, one click). |
+| **Telemetry detector** | Flags when a program on your PC contacts a known telemetry/diagnostics server (crash reports, usage stats). Logs it in its own history — never blocks it. |
 | **Monthly data quota** | Set your plan and billing day: usage, projection and warnings at 80 % / 100 %. |
 | **History and alerts** | Per-minute usage, per-program usage, new programs, sustained uploads. Kept on your PC only. |
 | **Search bar** | Up to 5 search engines, one keystroke to search in all. |

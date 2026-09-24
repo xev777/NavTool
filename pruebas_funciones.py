@@ -315,5 +315,47 @@ tr_test = _tray.Tray("x.ico", lambda a: None, lambda: {"proxy_on": False, "unsee
 check("El menú de la bandeja incluye la opción de restaurar posición",
       any(item and item[1] == "reset_position" for item in tr_test._items()))
 
+# ---------------- telemetría: detección, historial y ventana
+import traffic_monitor as tm
+check("Detecta un dominio de telemetría conocido y sus subdominios, no cosas al azar",
+      tm.is_telemetry("vortex.data.microsoft.com") and tm.is_telemetry("a.b.sentry.io")
+      and not tm.is_telemetry("example.com") and not tm.is_telemetry(""))
+
+h2 = History(os.path.join(tmp, "h2.db"))
+h2.add_alert("telemetry", "Chrome envió telemetría a sentry.io", "detalle", "Chrome")
+h2.add_alert("new", "Nuevo programa", "detalle", "Otro")
+check("alerts_by_kind solo devuelve las del tipo pedido",
+      len(h2.alerts_by_kind("telemetry")) == 1 and h2.alerts_by_kind("telemetry")[0]["proc"] == "Chrome")
+check("unseen_alerts(kind) cuenta solo ese tipo, sin kind cuenta todas",
+      h2.unseen_alerts("telemetry") == 1 and h2.unseen_alerts() == 2)
+h2.mark_alerts_seen("telemetry")
+check("mark_alerts_seen(kind) no marca como leídas las de otro tipo",
+      h2.unseen_alerts("telemetry") == 0 and h2.unseen_alerts("new") == 1)
+
+import watcher as wt
+class _FakeEngine:
+    def snapshot(self):
+        return {"rows": [{"proc": "Chrome", "host": "sentry.io", "company": "", "cat": "telemetry",
+                          "active": True}]}
+avisos_tel = []
+w = wt.Watcher(h2, lambda: n.CFG, lambda t, m: avisos_tel.append(t), lambda: _FakeEngine())
+w.check_telemetry()
+check("El vigilante registra una alerta al ver tráfico activo a un servidor de telemetría",
+      len(h2.alerts_by_kind("telemetry")) == 2 and bool(avisos_tel))
+w.check_telemetry()
+check("No repite la misma alerta antes de que pase el tiempo de espera (cooldown)",
+      len(h2.alerts_by_kind("telemetry")) == 2)
+
+from telemetria import TelemetryWindow
+avisos_badge = []
+tw = TelemetryWindow(app, h2, lambda: avisos_badge.append(1))
+tw.refresh()
+check("La ventana de telemetría lista las detecciones guardadas", len(tw.rows) == 2)
+check("Abrirla marca como leídas sus detecciones y avisa a la barra para refrescar el contador",
+      h2.unseen_alerts("telemetry") == 0 and bool(avisos_badge))
+tw.destroy()
+check("El menú de la bandeja incluye Telemetría detectada",
+      any(item and item[1] == "telemetria" for item in tr_test._items()))
+
 app.quit_app(); shutil.rmtree(tmp, ignore_errors=True)
 print(f"\nRESULTADO: {ok} bien, {fail} fallos")

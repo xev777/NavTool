@@ -681,13 +681,16 @@ class Floating(tk.Tk):
         # segundo plano: icono junto al reloj, vigilante de alertas y captura opcional por programa
         self._acts = queue.Queue()      # acciones que llegan desde otros hilos (bandeja, alertas)
         self._unseen = HIST.unseen_alerts()
+        self._tel_unseen = HIST.unseen_alerts("telemetry")
         self.bg_engine = None
         self.history_win = None
+        self.telemetry_win = None
         self.tray = None
         try:
             from tray import Tray
             self.tray = Tray(self._resource("navtool.ico"), self._acts.put, lambda: {
                 "proxy_on": bool(self.proxy.server), "unseen": self._unseen,
+                "tel_unseen": self._tel_unseen,
                 "has_report": bool(self.last_report), "autostart": autostart_enabled(),
                 "can_autostart": bool(autostart_command())})
             self.tray.start()
@@ -726,6 +729,7 @@ class Floating(tk.Tk):
                  "report": self.win_report, "history": self.win_history,
                  "help": self.win_help, "about": lambda: self.win_help("Acerca de"),
                  "quota": self.win_quota, "blocked": self.win_blocked, "store": self.win_tienda,
+                 "telemetria": self.win_telemetria,
                  "badge": self.refresh_alert_badge, "quit": self.quit_app}.get(act, lambda: None)()
         except queue.Empty:
             pass
@@ -779,6 +783,7 @@ class Floating(tk.Tk):
 
     def refresh_alert_badge(self):
         self._unseen = HIST.unseen_alerts()
+        self._tel_unseen = HIST.unseen_alerts("telemetry")
         n = self._unseen
         self.hist_btn.config(text=self._hist_text(n), bg="#c9772b" if n else BTN)
 
@@ -839,6 +844,14 @@ class Floating(tk.Tk):
     def _open_report_dict(self, rep):
         from report_view import ReportWindow
         ReportWindow(self, rep, self.add_block, is_blocked_host, self.add_allow)
+
+    def win_telemetria(self):
+        if self.telemetry_win is not None and self.telemetry_win.winfo_exists():
+            self.telemetry_win.deiconify()
+            self.telemetry_win.lift()
+            return
+        from telemetria import TelemetryWindow
+        self.telemetry_win = TelemetryWindow(self, HIST, self.refresh_alert_badge)
 
     @property
     def compact(self):

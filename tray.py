@@ -85,6 +85,7 @@ class Tray:
     def _items(self):
         s = self.state()
         n = s["unseen"]
+        nt = s.get("tel_unseen", 0)
         return [
             (tr("Mostrar / ocultar barra"), "toggle_bar", True, None, True),
             (tr("Restaurar posición de la barra (si no se ve)"), "reset_position", False, None, True),
@@ -101,6 +102,8 @@ class Tray:
             (tr("📅 Cuota mensual de datos"), "quota", False, None, True),
             (tr("🚫 Programas bloqueados"), "blocked", False, None, True),
             (tr("🛍 Compatibilidad con apps de la Tienda"), "store", False, None, True),
+            (tr("📊 Telemetría detectada") + (("  " + tr(f"({nt} nuevas)")) if nt else ""),
+             "telemetria", False, None, True),
             SEP,
             (tr("❓ Ayuda"), "help", False, None, True),
             (tr("Acerca de NavTool"), "about", False, None, True),

@@ -10,7 +10,7 @@ BG, PANEL, FG, MUTED, ACC = "#14202f", "#1b2a41", "#e8eef7", "#8ea3bd", "#3fa9f5
 DOWN_C, UP_C = "#3fa9f5", "#ffa94d"
 RANGES = {"1 hora": (3600, 60), "6 horas": (6 * 3600, 300), "24 horas": (86400, 900),
           "7 días": (7 * 86400, 7200)}
-ALERT_ICON = {"new": "🆕", "path": "⚠", "upload": "📤", "proc_upload": "📤"}
+ALERT_ICON = {"new": "🆕", "path": "⚠", "upload": "📤", "proc_upload": "📤", "telemetry": "📊"}
 
 
 def human(n):

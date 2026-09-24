@@ -1,5 +1,20 @@
 # Changelog / Registro de cambios
 
+## 1.1.5 — 2026-09-23
+
+**New / Novedades**
+- **Telemetry detector**: NavTool now flags when a program on your PC contacts a known
+  telemetry/diagnostics server (crash reports, usage statistics sent to its maker). It only detects
+  and logs it in a new **📊 Telemetría detectada** window (tray menu) with its own history — it never
+  blocks the connection or the program. Needs per-program monitoring (Npcap) already used by the
+  traffic monitor. This does not change what NavTool itself sends: still nothing, ever.
+  / **Detector de telemetría**: NavTool avisa cuando un programa de tu PC contacta con un servidor de
+  telemetría/diagnóstico conocido (informes de fallos, estadísticas de uso que envía a su fabricante).
+  Solo lo detecta y lo registra en una nueva ventana **📊 Telemetría detectada** (menú de la bandeja)
+  con su propio historial — nunca bloquea la conexión ni el programa. Necesita el monitoreo por
+  programa (Npcap) que ya usa el monitor de tráfico. Esto no cambia lo que NavTool mismo envía: sigue
+  sin enviar nada, nunca.
+
 ## 1.1.4 — 2026-09-23
 
 **Fixes / Correcciones**

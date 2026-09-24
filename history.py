@@ -137,11 +137,19 @@ class History:
     def alerts(self, limit=300):
         return self._r("SELECT * FROM alerts ORDER BY ts DESC LIMIT ?", (limit,))
 
-    def unseen_alerts(self):
-        return self._r("SELECT COUNT(*) AS n FROM alerts WHERE seen=0")[0]["n"]
+    def alerts_by_kind(self, kind, limit=300):
+        return self._r("SELECT * FROM alerts WHERE kind=? ORDER BY ts DESC LIMIT ?", (kind, limit))
 
-    def mark_alerts_seen(self):
-        self._w("UPDATE alerts SET seen=1 WHERE seen=0")
+    def unseen_alerts(self, kind=None):
+        if kind is None:
+            return self._r("SELECT COUNT(*) AS n FROM alerts WHERE seen=0")[0]["n"]
+        return self._r("SELECT COUNT(*) AS n FROM alerts WHERE seen=0 AND kind=?", (kind,))[0]["n"]
+
+    def mark_alerts_seen(self, kind=None):
+        if kind is None:
+            self._w("UPDATE alerts SET seen=1 WHERE seen=0")
+        else:
+            self._w("UPDATE alerts SET seen=1 WHERE seen=0 AND kind=?", (kind,))
 
     # ---- mantenimiento
     def clear_all(self):
