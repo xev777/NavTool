@@ -1,6 +1,6 @@
 # Changelog / Registro de cambios
 
-## 1.0.0 — unreleased / sin publicar
+## 1.0.0 — 2026-09-24
 
 **Renamed: NavTool is now TrafficBar / Cambio de nombre: NavTool ahora se llama TrafficBar**
 - Same app, same GPL-3.0 license, same author, same features — only the name changes. The old name
