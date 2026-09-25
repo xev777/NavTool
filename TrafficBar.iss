@@ -6,7 +6,7 @@
 ; {app}\idioma.txt y es el idioma inicial de la aplicación (luego se cambia desde la propia barra).
 
 #define AppName "TrafficBar"
-#define AppVersion "2.0.0"
+#define AppVersion "1.0.0"
 #define AppExe "TrafficBar.exe"
 
 [Setup]

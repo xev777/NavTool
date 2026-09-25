@@ -1,6 +1,6 @@
 # Changelog / Registro de cambios
 
-## 2.0.0 — unreleased / sin publicar
+## 1.0.0 — unreleased / sin publicar
 
 **Renamed: NavTool is now TrafficBar / Cambio de nombre: NavTool ahora se llama TrafficBar**
 - Same app, same GPL-3.0 license, same author, same features — only the name changes. The old name
@@ -24,6 +24,10 @@
   (GitHub redirige la URL anterior automáticamente).
 
 **New / Novedades**
+- **New icon and splash screen**: the old icon and the 3-second startup animation showed the NavTool
+  name/mark; both are now TrafficBar's own (a bar-chart mark instead of a letter). / **Icono y
+  pantalla de bienvenida nuevos**: el icono y la animación de 3 segundos al abrir mostraban el nombre
+  de NavTool; ahora son propios de TrafficBar (una marca de barras en vez de una letra).
 - **Traffic button LED**: a small green dot next to «📡 Tráfico» lights up only while the per-program
   background capture is actually running (Npcap, administrator) — the button itself no longer needs to
   change color to show this. / **Punto en el botón de Tráfico**: un pequeño punto verde junto a

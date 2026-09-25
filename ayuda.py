@@ -9,7 +9,7 @@ import webbrowser
 from i18n import tr
 from safety import monitor_work_area
 
-VERSION = "2.0.0"
+VERSION = "1.0.0"
 BG, PANEL, FG, MUTED, ACC = "#1b2a41", "#0f1a2b", "#e8eef7", "#8ea3bd", "#3fa9f5"
 CREDITOS = {"autor": "Fernando", "repo": "", "licencia": "", "donaciones": []}
 try:        # creditos.json (junto a la app): autor, enlace del código fuente y donaciones opcionales
@@ -95,7 +95,7 @@ class Splash(tk.Toplevel):
         n = min(len(name), int(el / 110))
         c.create_text(cx, 184, text=name[:n], fill=FG, font=("Segoe UI", 24, "bold"))
         if el > 900:
-            c.create_text(cx, 212, text="Tu navegación y tu red, a la vista y bajo control",
+            c.create_text(cx, 212, text="Tu tráfico de red, a la vista y bajo control",
                           fill=MUTED, font=("Segoe UI", 9))
         # barra de progreso con mensajes de arranque
         frac = min(el / SPLASH_MS, 1.0)
