@@ -1,4 +1,4 @@
-"""Globos de ayuda (tooltips) de NavTool.
+"""Globos de ayuda (tooltips) de TrafficBar.
 
     tip(widget, "texto")                      texto fijo
     tip(widget, lambda: f"...{estado}...")    texto que cambia (se calcula al mostrarse)

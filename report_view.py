@@ -25,7 +25,7 @@ class ReportWindow(tk.Toplevel):
         super().__init__(app, bg=BG)
         self.report, self.on_block, self.is_listed = report, on_block, is_listed
         self.on_allow = on_allow
-        self.title(f"NavTool – Informe de privacidad · {report['main']}")
+        self.title(f"TrafficBar – Informe de privacidad · {report['main']}")
         self.geometry("820x640")
         if hasattr(app, "place_near"):
             app.place_near(self, 820, 640)
@@ -147,7 +147,7 @@ class ReportWindow(tk.Toplevel):
                                  self.block_all_trackers, "#7a2a2a")
         if self.on_allow:
             tip(self._btn(row, "✅ Permitir seleccionados", self.allow_selected, "#2e6b4a"),
-                "Añade el sitio a tus excepciones: NavTool dejará de bloquearlo (útil si la página "
+                "Añade el sitio a tus excepciones: TrafficBar dejará de bloquearlo (útil si la página "
                 "se rompe sin él).")
         self._btn(row, "Cerrar", self.destroy, "#27405f", side="right")
 

@@ -1,4 +1,4 @@
-"""Proxy local de NavTool (endurecido).
+"""Proxy local de TrafficBar (endurecido).
 
 Decisiones de seguridad:
 - Escucha solo en 127.0.0.1 y con SO_EXCLUSIVEADDRUSE: en Windows, SO_REUSEADDR deja que OTRO
@@ -28,7 +28,7 @@ CHUNK = 64 * 1024
 PORT_RANGE = (49152, 65000)
 
 # puerto local de cada conexión saliente -> puerto del cliente (navegador) que la pidió.
-# Sirve para que el monitor de tráfico muestre "opera.exe" y no "NavTool.exe".
+# Sirve para que el monitor de tráfico muestre "opera.exe" y no "TrafficBar.exe".
 UPSTREAM = {}
 
 
@@ -139,7 +139,7 @@ class SecureServer(ThreadingHTTPServer):
 
 
 class Proxy:
-    """stats/loader/cfg/is_blocked los pone NavTool; así el proxy no depende de la interfaz."""
+    """stats/loader/cfg/is_blocked los pone TrafficBar; así el proxy no depende de la interfaz."""
 
     def __init__(self, stats, loader, cfg, is_blocked):
         self.ctx = (stats, loader, cfg, is_blocked)
@@ -245,8 +245,8 @@ class ProxyHandler(BaseHTTPRequestHandler):
             return self._refuse(403)
         why = self._blocked(host)
         if why:
-            return self._refuse(403, "Bloqueado por NavTool" if why == "blocked"
-                                else "Carga cortada por NavTool")
+            return self._refuse(403, "Bloqueado por TrafficBar" if why == "blocked"
+                                else "Carga cortada por TrafficBar")
         try:
             up = socket.create_connection((host, port), timeout=15)
         except OSError:

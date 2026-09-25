@@ -1,4 +1,4 @@
-"""Monitor de tráfico de red de NavTool (Npcap, sin librerías de terceros para los paquetes).
+"""Monitor de tráfico de red de TrafficBar (Npcap, sin librerías de terceros para los paquetes).
 
 Captura todos los paquetes que entran y salen del equipo, los agrupa en
 "conversaciones" (programa ↔ destino ↔ servicio) y los muestra en lenguaje claro.
@@ -539,7 +539,7 @@ class Engine:
         return self.pnames[pid]
 
     def _via_proxy(self, f):
-        """Si la conexión la abrió el proxy de NavTool para un navegador, devuelve ese programa."""
+        """Si la conexión la abrió el proxy de TrafficBar para un navegador, devuelve ese programa."""
         try:
             import proxy_core
             cport = proxy_core.UPSTREAM.get(f.lport)
@@ -673,11 +673,11 @@ class Engine:
                 if f.proc is None:
                     p = self.procmap.get((f.proto, f.lport))
                     if p and p[0] == self.pnames.get(os.getpid()) and f.proto == "TCP" and f.miss < 4:
-                        f.proc = self._via_proxy(f)     # lo pidió un navegador a través de NavTool
+                        f.proc = self._via_proxy(f)     # lo pidió un navegador a través de TrafficBar
                         if f.proc is None:
                             f.miss += 1
                             if f.miss >= 4:
-                                f.proc = p[0]           # conexión propia de NavTool
+                                f.proc = p[0]           # conexión propia de TrafficBar
                     elif p:
                         f.proc = p[0]
                     elif f.proto == "ICMP":
@@ -804,12 +804,12 @@ DOWN_C, UP_C = "#3fa9f5", "#ffa94d"
 class TrafficWindow(tk.Toplevel):
     def __init__(self, master, is_ad, engine=None):
         super().__init__(master, bg=BG)
-        self.title("NavTool – Tráfico de red")
+        self.title("TrafficBar – Tráfico de red")
         self.geometry("1120x720")
         if hasattr(master, "place_near"):
             master.place_near(self, 1120, 720)
         self.attributes("-topmost", False)
-        self.shared = engine is not None          # captura de segundo plano de NavTool
+        self.shared = engine is not None          # captura de segundo plano de TrafficBar
         self.engine = engine or Engine(is_ad)
         self.seen_events = 0
         self.iface_choice = None
@@ -905,7 +905,7 @@ class TrafficWindow(tk.Toplevel):
         tip(self._button(ctl, "💾 Exportar CSV", self.export_csv),
             "Guarda la lista de conversaciones en un archivo CSV para abrirla en Excel.")
         tip(self._button(ctl, "🚫 Bloqueados", lambda: self.master.win_blocked()),
-            "Programas a los que NavTool quitó el acceso a Internet. Para bloquear uno: clic derecho "
+            "Programas a los que TrafficBar quitó el acceso a Internet. Para bloquear uno: clic derecho "
             "sobre su fila.")
         tk.Label(ctl, text="  Buscar:", bg=BG, fg=MUTED).pack(side="left")
         self.q = tk.StringVar()
@@ -1008,13 +1008,13 @@ class TrafficWindow(tk.Toplevel):
         try:
             self.engine.start(choice)
         except Exception as e:
-            messagebox.showerror("NavTool", f"No se pudo iniciar la captura:\n{e}\n\n"
-                                 "Comprueba que Npcap está instalado y que NavTool se "
+            messagebox.showerror("TrafficBar", f"No se pudo iniciar la captura:\n{e}\n\n"
+                                 "Comprueba que Npcap está instalado y que TrafficBar se "
                                  "ejecuta como administrador.", parent=self)
 
     def _toggle_rdap(self):
         if self.rdap.get() and not messagebox.askyesno(
-                "NavTool", "Para saber de quién es una IP desconocida, NavTool enviará esa "
+                "TrafficBar", "Para saber de quién es una IP desconocida, TrafficBar enviará esa "
                 "IP (no tu contenido ni tu nombre) a un servicio público de registros de "
                 "Internet (rdap.org).\n\n¿Activar?", parent=self):
             self.rdap.set(False)
@@ -1054,7 +1054,7 @@ class TrafficWindow(tk.Toplevel):
         self._fill_feed(snap["events"])
         if self.nb.index("current") == 3:
             self._fill_dns(snap["dns"])
-        self.title(f"NavTool – Tráfico de red · capturando: {snap['iface']}")
+        self.title(f"TrafficBar – Tráfico de red · capturando: {snap['iface']}")
         self.after(1000, self.refresh)
 
     def redraw_tabs(self):
@@ -1170,7 +1170,7 @@ class TrafficWindow(tk.Toplevel):
         if r["cat"] == "ads":
             text += "\nEstá en tu lista de publicidad / rastreo."
         if r["cat"] == "telemetry":
-            text += "\nEs un servidor de telemetría/diagnóstico conocido: NavTool lo registra, no lo bloquea."
+            text += "\nEs un servidor de telemetría/diagnóstico conocido: TrafficBar lo registra, no lo bloquea."
         return text + "\n(Doble clic: detalle completo)"
 
     def _fill_tree(self, rows):
@@ -1274,21 +1274,21 @@ class TrafficWindow(tk.Toplevel):
         import programas
         path = r.get("path") or ""
         if not path:
-            messagebox.showinfo("NavTool", "No se pudo saber dónde está el programa (quizá ya se cerró).",
+            messagebox.showinfo("TrafficBar", "No se pudo saber dónde está el programa (quizá ya se cerró).",
                                 parent=self)
             return
         if not programas.es_admin():
-            messagebox.showinfo("NavTool", "Bloquear requiere permisos de administrador.", parent=self)
+            messagebox.showinfo("TrafficBar", "Bloquear requiere permisos de administrador.", parent=self)
             return
         mins = programas.preguntar(self, r["proc"], path)
         if mins is None:
             return
         ok, why = programas.bloquear(path, mins)
         if ok:
-            messagebox.showinfo("NavTool", f"«{r['proc']}» ya no tiene acceso a Internet. "
+            messagebox.showinfo("TrafficBar", f"«{r['proc']}» ya no tiene acceso a Internet. "
                                 "Puedes deshacerlo en 🚫 Bloqueados.", parent=self)
         else:
-            messagebox.showerror("NavTool", why, parent=self)
+            messagebox.showerror("TrafficBar", why, parent=self)
 
     def show_detail(self, _e=None):
         sel = self.tree.selection()
@@ -1325,10 +1325,10 @@ class TrafficWindow(tk.Toplevel):
                                  "tráfico mueve, no lo que dice.", "m")]
         if r["cat"] == "ads":
             lines += [("", ""), ("Este dominio está en tu lista de publicidad/rastreo. Puedes "
-                                 "bloquearlo desde NavTool > Filtros.", "m")]
+                                 "bloquearlo desde TrafficBar > Filtros.", "m")]
         if r["cat"] == "telemetry":
             lines += [("", ""), ("Este es un servidor de telemetría/diagnóstico conocido: el programa "
-                                 "envía datos de uso o de fallos a su fabricante. NavTool solo lo "
+                                 "envía datos de uso o de fallos a su fabricante. TrafficBar solo lo "
                                  "registra en 📊 Telemetría detectada; no corta la conexión.", "m")]
         if r["inbound"]:
             lines += [("", ""), ("Una conexión ENTRANTE es alguien de fuera hablando con tu "
@@ -1361,4 +1361,4 @@ class TrafficWindow(tk.Toplevel):
                             r["up"], "sí" if r["inbound"] else "no",
                             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(r["first"])),
                             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(r["last"]))])
-        messagebox.showinfo("NavTool", f"Exportado en:\n{path}", parent=self)
+        messagebox.showinfo("TrafficBar", f"Exportado en:\n{path}", parent=self)

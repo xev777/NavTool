@@ -31,7 +31,7 @@ class HistoryWindow(tk.Toplevel):
         super().__init__(app, bg=BG)
         self.app, self.hist, self.cfg, self.save_cfg = app, hist, cfg, save_cfg
         self.open_report, self.set_monitor, self.monitor_state = open_report, set_monitor, monitor_state
-        self.title("NavTool – Historial y alertas")
+        self.title("TrafficBar – Historial y alertas")
         self.geometry("1020x700")
         if hasattr(app, "place_near"):
             app.place_near(self, 1020, 700)
@@ -53,7 +53,7 @@ class HistoryWindow(tk.Toplevel):
             builder(f)
         foot = tk.Frame(self, bg=BG)
         foot.pack(fill="x", padx=10, pady=(0, 8))
-        tk.Label(foot, text="Todo se guarda solo en este equipo (carpeta de datos de NavTool) y "
+        tk.Label(foot, text="Todo se guarda solo en este equipo (carpeta de datos de TrafficBar) y "
                             "se borra solo a los 30 días.", bg=BG, fg=MUTED,
                  font=("Segoe UI", 8)).pack(side="left")
         tip(self._button(foot, "🗑 Borrar todo el historial", self._clear_all, "#7a2a2a", side="right"),
@@ -176,7 +176,7 @@ class HistoryWindow(tk.Toplevel):
         c.create_text(w - 78, 4, anchor="ne", fill=UP_C, font=("Segoe UI", 9, "bold"), text="■ subida")
         if not any(b["down"] or b["up"] for _, b in self.bins):
             c.create_text(w / 2, h / 2, fill=MUTED, font=("Segoe UI", 11),
-                          text="Sin datos todavía en este rango: NavTool los va guardando cada minuto.")
+                          text="Sin datos todavía en este rango: TrafficBar los va guardando cada minuto.")
         rows = self.hist.top_programs(since, until)
         self.tl_tree.delete(*self.tl_tree.get_children())
         for r in rows:
@@ -184,7 +184,7 @@ class HistoryWindow(tk.Toplevel):
         self.tl_top_lbl.config(text="Programas que más tráfico movieron en este rango")
         self.tl_note.config(text="" if rows else
                             "El desglose por programa se llena con el «monitoreo por programa» "
-                            "(pestaña Alertas → requiere Npcap y NavTool como administrador).")
+                            "(pestaña Alertas → requiere Npcap y TrafficBar como administrador).")
 
     def _bin_at(self, x):
         pad_l, step, _, _ = self._geom
@@ -304,7 +304,7 @@ class HistoryWindow(tk.Toplevel):
                    bg="#0f1a2b", fg=FG, buttonbackground=PANEL, relief="flat").pack(side="left", padx=6)
         tk.Label(r2, text="MB en un minuto", bg=BG, fg=MUTED).pack(side="left")
         self.mon_var = tk.BooleanVar(value=self.monitor_state()[0])
-        tk.Checkbutton(cfgf, text="Monitoreo continuo por programa (Npcap; requiere NavTool como "
+        tk.Checkbutton(cfgf, text="Monitoreo continuo por programa (Npcap; requiere TrafficBar como "
                                   "administrador)", variable=self.mon_var, bg=BG, fg=FG,
                        selectcolor=PANEL, activebackground=BG, activeforeground=FG,
                        anchor="w").pack(fill="x", pady=(4, 0))
@@ -319,7 +319,7 @@ class HistoryWindow(tk.Toplevel):
             self.cfg["alert_up_mb_s"] = max(0.5, float(self.up_var.get()))
             self.cfg["alert_proc_mb_min"] = max(10.0, float(self.proc_var.get()))
         except tk.TclError:
-            messagebox.showwarning("NavTool", "Escribe números válidos.", parent=self)
+            messagebox.showwarning("TrafficBar", "Escribe números válidos.", parent=self)
             return
         self.save_cfg(self.cfg)
         msg = self.set_monitor(self.mon_var.get())
@@ -400,7 +400,7 @@ class HistoryWindow(tk.Toplevel):
                 self.open_report(rep)
 
     def _clear_all(self):
-        if messagebox.askyesno("NavTool", "¿Borrar TODO el historial (páginas visitadas, tráfico, "
+        if messagebox.askyesno("TrafficBar", "¿Borrar TODO el historial (páginas visitadas, tráfico, "
                                "conexiones y alertas)?\n\nNo se puede deshacer.", parent=self):
             self.hist.clear_all()
             self.app.refresh_alert_badge()

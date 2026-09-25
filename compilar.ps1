@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Compila NavTool y genera el instalador y la versión portable (carpeta Output).
+    Compila TrafficBar y genera el instalador y la versión portable (carpeta Output).
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File .\compilar.ps1
 #>
@@ -17,32 +17,32 @@ if ($LASTEXITCODE -ne 0) { throw "Hay un pack de idioma inválido en .\idiomas" 
 python version_info.py
 if ($LASTEXITCODE -ne 0) { throw "version_info.py falló" }
 
-# 1) NavTool en modo carpeta (no un .exe único: ver SEGURIDAD.md, hallazgo S3)
-# Solo se cierran los NavTool que salen de ESTA carpeta de compilación (nunca el instalado ni el que estés usando).
+# 1) TrafficBar en modo carpeta (no un .exe único: ver SEGURIDAD.md, hallazgo S3)
+# Solo se cierran los TrafficBar que salen de ESTA carpeta de compilación (nunca el instalado ni el que estés usando).
 # Antes se pide que devuelva el proxy a Windows (un cierre brusco con el ⏻ encendido lo dejaría apuntando a un puerto muerto).
-$propios = Get-Process NavTool -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith("$PSScriptRoot\dist", "OrdinalIgnoreCase") }
+$propios = Get-Process TrafficBar -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith("$PSScriptRoot\dist", "OrdinalIgnoreCase") }
 if ($propios) {
-    python navtool.py --restaurar-proxy
+    python trafficbar.py --restaurar-proxy
     $propios | Stop-Process -Force -ErrorAction SilentlyContinue
 }
 if (Test-Path "$PSScriptRoot\dist") { Remove-Item "$PSScriptRoot\dist" -Recurse -Force }
-python -m PyInstaller --noconfirm --onedir --noconsole --name NavTool --icon navtool.ico --version-file version_info.txt `
-    --add-data "navtool.ico;." --add-data "idiomas;idiomas" --add-data "creditos.json;." `
+python -m PyInstaller --noconfirm --onedir --noconsole --name TrafficBar --icon trafficbar.ico --version-file version_info.txt `
+    --add-data "trafficbar.ico;." --add-data "idiomas;idiomas" --add-data "creditos.json;." `
     --hidden-import traffic_monitor --hidden-import loadtrack --hidden-import load_panel `
     --hidden-import privacy --hidden-import report_view --hidden-import history `
     --hidden-import history_view --hidden-import watcher --hidden-import tray `
     --hidden-import proxy_core --hidden-import safety --hidden-import tooltip `
     --hidden-import ayuda --hidden-import i18n --hidden-import cuota --hidden-import programas `
     --hidden-import blocklists --hidden-import pcap --hidden-import netparse --hidden-import tienda `
-    --hidden-import telemetria --hidden-import psutil navtool.py
+    --hidden-import telemetria --hidden-import psutil trafficbar.py
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló" }
 
 # 1b) Antes de seguir: Microsoft Defender no debe marcar el ejecutable. Si lo marca, NO se publica (los usuarios
 #     recibirían un «malware» en cuarentena: pasó con la 1.1.1). -DisableRemediation: solo analiza, no borra.
 $mp = "$env:ProgramFiles\Windows Defender\MpCmdRun.exe"
 if (Test-Path $mp) {
-    $res = & $mp -Scan -ScanType 3 -File "$PSScriptRoot\dist\NavTool\NavTool.exe" -DisableRemediation 2>&1 | Out-String
-    if ($res -match "found (\d+) threats" -and [int]$Matches[1] -gt 0) { throw "Defender marca NavTool.exe como amenaza:`n$res`nNo se publica. Revisa los cambios recientes (ver CHANGELOG 1.1.2)." }
+    $res = & $mp -Scan -ScanType 3 -File "$PSScriptRoot\dist\TrafficBar\TrafficBar.exe" -DisableRemediation 2>&1 | Out-String
+    if ($res -match "found (\d+) threats" -and [int]$Matches[1] -gt 0) { throw "Defender marca TrafficBar.exe como amenaza:`n$res`nNo se publica. Revisa los cambios recientes (ver CHANGELOG 1.1.2)." }
     if ($res -match "found no threats") { Write-Host "Defender: sin amenazas" -ForegroundColor Green }
     else { Write-Warning "No se pudo confirmar el análisis de Defender (¿servicio desactivado?):`n$res" }
 }
@@ -52,51 +52,51 @@ $iscc = @("$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
           "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
           "$env:ProgramFiles\Inno Setup 6\ISCC.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $iscc) { throw "No encuentro Inno Setup 6 (winget install JRSoftware.InnoSetup)" }
-& $iscc "$PSScriptRoot\NavTool.iss"
+& $iscc "$PSScriptRoot\TrafficBar.iss"
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup falló" }
 
-$setup = Get-ChildItem "$PSScriptRoot\Output\NavTool-Setup-*.exe" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+$setup = Get-ChildItem "$PSScriptRoot\Output\TrafficBar-Setup-*.exe" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 
 # 3) Versión portable: la misma carpeta + «portable.flag» (los datos van en la carpeta «Datos» de al lado)
-$version = ([regex]::Match((Get-Content "$PSScriptRoot\NavTool.iss" -Raw), '#define AppVersion "([^"]+)"')).Groups[1].Value
-$stage = "$PSScriptRoot\Output\_portable\NavTool"
+$version = ([regex]::Match((Get-Content "$PSScriptRoot\TrafficBar.iss" -Raw), '#define AppVersion "([^"]+)"')).Groups[1].Value
+$stage = "$PSScriptRoot\Output\_portable\TrafficBar"
 if (Test-Path "$PSScriptRoot\Output\_portable") { Remove-Item "$PSScriptRoot\Output\_portable" -Recurse -Force }
 New-Item -ItemType Directory $stage -Force | Out-Null
-Copy-Item "$PSScriptRoot\dist\NavTool\*" $stage -Recurse
-Set-Content "$stage\portable.flag" "Portable mode: NavTool keeps its settings and history in the 'Datos' folder next to it."
+Copy-Item "$PSScriptRoot\dist\TrafficBar\*" $stage -Recurse
+Set-Content "$stage\portable.flag" "Portable mode: TrafficBar keeps its settings and history in the 'Datos' folder next to it."
 @"
-NavTool $version - portable version / versión portable
+TrafficBar $version - portable version / versión portable
 ======================================================
 
 ENGLISH
 -------
 No installation needed:
   1. If Windows blocks the .zip, before extracting: right-click > Properties > check "Unblock".
-  2. Extract the NavTool folder anywhere (disk, USB drive...).
-  3. Run NavTool.exe.
+  2. Extract the TrafficBar folder anywhere (disk, USB drive...).
+  3. Run TrafficBar.exe.
 Language: English by default. Change it any time: right-click the bar > "Idioma / Language".
 Everything of yours (settings, history, block list) is stored in the "Datos" folder next to the program.
 To take it with you, copy the whole folder. To erase your traces, delete "Datos".
 It writes nothing to the registry or your profile ("Start with Windows" is not included).
 The traffic monitor needs Npcap (npcap.com) and administrator rights. To quit: right-click the tray
-icon > "Quit NavTool". The data in "Datos" includes the sites you visit: do not leave it on a USB you lend.
+icon > "Quit TrafficBar". The data in "Datos" includes the sites you visit: do not leave it on a USB you lend.
 
 ESPAÑOL
 -------
 No necesita instalación:
   1. Si Windows bloquea el .zip, antes de extraerlo: clic derecho > Propiedades > marca "Desbloquear".
-  2. Extrae la carpeta NavTool donde quieras (disco, memoria USB...).
-  3. Ejecuta NavTool.exe.
+  2. Extrae la carpeta TrafficBar donde quieras (disco, memoria USB...).
+  3. Ejecuta TrafficBar.exe.
 Idioma: inglés por defecto. Cámbialo cuando quieras: clic derecho en la barra > "Idioma / Language".
 Todo lo tuyo (configuración, historial, lista de bloqueo) se guarda en la carpeta "Datos" de al lado.
 Para llevártelo, copia la carpeta entera. Para borrar tus huellas, borra "Datos".
 No escribe nada en el registro ni en tu perfil: no incluye "Iniciar con Windows".
 El monitor de tráfico necesita Npcap (npcap.com) y permisos de administrador. Como administrador
-conviene ejecutar NavTool desde una carpeta que solo tú puedas modificar (ver SEGURIDAD.md, S3).
-Para salir: clic derecho en el icono de la bandeja > "Salir de NavTool".
+conviene ejecutar TrafficBar desde una carpeta que solo tú puedas modificar (ver SEGURIDAD.md, S3).
+Para salir: clic derecho en el icono de la bandeja > "Salir de TrafficBar".
 Los datos de "Datos" incluyen los sitios que visitas: no la dejes en un USB que prestes.
 "@ | Set-Content "$stage\README.txt" -Encoding UTF8
-$zip = "$PSScriptRoot\Output\NavTool-Portable-$version.zip"
+$zip = "$PSScriptRoot\Output\TrafficBar-Portable-$version.zip"
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path $stage -DestinationPath $zip -CompressionLevel Optimal
 Remove-Item "$PSScriptRoot\Output\_portable" -Recurse -Force

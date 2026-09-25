@@ -1,4 +1,4 @@
-"""Suite de pruebas de seguridad de NavTool.
+"""Suite de pruebas de seguridad de TrafficBar.
 
 Ataques reales contra el proxy, el filtro, las utilidades y el monitor, más pruebas de
 regresión de que lo normal sigue funcionando. Todo local y en carpetas temporales:
@@ -27,7 +27,7 @@ for d in (os.environ["APPDATA"], os.environ["LOCALAPPDATA"]):
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import psutil                      # noqa: E402
-import navtool as n                # noqa: E402
+import trafficbar as n                # noqa: E402
 import safety                      # noqa: E402
 import proxy_core                  # noqa: E402
 
@@ -308,7 +308,7 @@ check("Los caracteres de dirección de texto y de control se eliminan de los nom
 
 # 13. ajustes de proxy huérfanos
 n.PROXY_PORT = 0
-check("Se reconoce como propio solo el proxy de NavTool",
+check("Se reconoce como propio solo el proxy de TrafficBar",
       n.is_our_proxy("127.0.0.1:8118") and not n.is_our_proxy("127.0.0.1:8888") and not n.is_our_proxy("evil.com:8118"))
 check("El proxy usa un puerto alto aleatorio, no uno predecible", proxy_core.PORT_RANGE[0] <= PP <= proxy_core.PORT_RANGE[1] and PP != 8118, str(PP))
 

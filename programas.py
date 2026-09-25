@@ -1,8 +1,8 @@
 """Bloqueo del acceso a Internet de un programa mediante el Cortafuegos de Windows.
 
-NavTool crea dos reglas (entrada y salida) con un nombre propio «NavTool block: …». Necesita permisos
+TrafficBar crea dos reglas (entrada y salida) con un nombre propio «TrafficBar block: …». Necesita permisos
 de administrador. Es reversible: el gestor de bloqueados las quita, y las temporales caducan solas
-mientras NavTool esté abierto como administrador. NUNCA bloquea componentes de Windows ni a NavTool.
+mientras TrafficBar esté abierto como administrador. NUNCA bloquea componentes de Windows ni a TrafficBar.
 """
 import ctypes
 import hashlib
@@ -17,11 +17,11 @@ from tkinter import messagebox, ttk
 
 from safety import clean_text, system_dir, system_exe
 
-PREFIJO = "NavTool block: "
+PREFIJO = "TrafficBar block: "
 PROTEGIDOS = {
     "system", "svchost.exe", "csrss.exe", "lsass.exe", "services.exe", "wininit.exe", "winlogon.exe",
     "smss.exe", "explorer.exe", "dwm.exe", "spoolsv.exe", "taskhostw.exe", "searchhost.exe",
-    "msmpeng.exe", "sihost.exe", "ctfmon.exe", "fontdrvhost.exe", "navtool.exe", "python.exe",
+    "msmpeng.exe", "sihost.exe", "ctfmon.exe", "fontdrvhost.exe", "trafficbar.exe", "python.exe",
     "pythonw.exe", "wudfhost.exe", "audiodg.exe", "runtimebroker.exe", "yogadns.exe",
 }
 BG, PANEL, FG, MUTED, ACC = "#1b2a41", "#0f1a2b", "#e8eef7", "#8ea3bd", "#3fa9f5"
@@ -49,7 +49,7 @@ def _cargar():
     out = []
     for d in datos if isinstance(datos, list) else []:
         if isinstance(d, dict) and isinstance(d.get("ruta"), str) and isinstance(d.get("regla"), str) \
-                and d["regla"].startswith(PREFIJO):           # nunca se toca una regla ajena a NavTool
+                and d["regla"].startswith(PREFIJO):           # nunca se toca una regla ajena a TrafficBar
             out.append({"nombre": clean_text(str(d.get("nombre", "")), 60), "ruta": d["ruta"],
                         "regla": d["regla"][:200], "desde": float(d.get("desde") or 0),
                         "hasta": float(d.get("hasta") or 0)})
@@ -67,7 +67,7 @@ def _guardar(lista):
 
 # ---------------------------------------------------------------- validación
 def validar(ruta):
-    """(ok, motivo). Solo rutas absolutas a un .exe que exista y que no sea de Windows ni de NavTool."""
+    """(ok, motivo). Solo rutas absolutas a un .exe que exista y que no sea de Windows ni de TrafficBar."""
     if not isinstance(ruta, str) or not ruta or len(ruta) > 259 or re.search(r'[\x00-\x1f"<>|*?]', ruta):
         return False, "La ruta del programa no es válida."
     if not os.path.isabs(ruta) or not ruta.lower().endswith(".exe") or not os.path.isfile(ruta):
@@ -77,9 +77,9 @@ def validar(ruta):
     if norm.startswith(windir + os.sep):
         return False, "Es un componente de Windows: bloquearlo podría dejar el sistema sin funcionar."
     if os.path.basename(norm) in PROTEGIDOS:
-        return False, "Es un programa protegido (necesario para Windows o para NavTool)."
+        return False, "Es un programa protegido (necesario para Windows o para TrafficBar)."
     if getattr(sys, "frozen", False) and norm == os.path.normcase(os.path.realpath(sys.executable)):
-        return False, "No se puede bloquear a NavTool desde sí mismo."
+        return False, "No se puede bloquear a TrafficBar desde sí mismo."
     return True, ""
 
 
@@ -127,7 +127,7 @@ def desbloquear(ruta_o_regla):
     lista = _cargar()
     item = next((x for x in lista if x["ruta"] == ruta_o_regla or x["regla"] == ruta_o_regla), None)
     if not item:
-        return False, "Ese programa no está en la lista de bloqueados por NavTool."
+        return False, "Ese programa no está en la lista de bloqueados por TrafficBar."
     _netsh("delete", "rule", f"name={item['regla']}")
     _guardar([x for x in lista if x is not item])
     return True, ""
@@ -153,7 +153,7 @@ def caducados():
 
 
 def quitar_todos():
-    """Al desinstalar: elimina todas las reglas creadas por NavTool."""
+    """Al desinstalar: elimina todas las reglas creadas por TrafficBar."""
     n = 0
     for x in _cargar():
         _netsh("delete", "rule", f"name={x['regla']}")
@@ -167,11 +167,11 @@ def preguntar(parent, nombre, ruta):
     """Ventana de confirmación. Devuelve None (cancelar) o los minutos (0 = hasta que lo desbloquees)."""
     ok, motivo = validar(ruta)
     if not ok:
-        messagebox.showinfo("NavTool", motivo, parent=parent)
+        messagebox.showinfo("TrafficBar", motivo, parent=parent)
         return None
     res = {"v": None}
     t = tk.Toplevel(parent, bg=BG)
-    t.title("NavTool – Bloquear programa")
+    t.title("TrafficBar – Bloquear programa")
     t.attributes("-topmost", True)
     t.resizable(False, False)
     tk.Label(t, text=f"Bloquear el acceso a Internet de «{nombre}»", bg=BG, fg=ACC,
@@ -185,7 +185,7 @@ def preguntar(parent, nombre, ruta):
     for txt, val in (("Durante 1 hora", 60), ("Durante 4 horas", 240), ("Hasta que yo lo desbloquee", 0)):
         tk.Radiobutton(t, text=txt, variable=v, value=val, bg=BG, fg=FG, selectcolor=PANEL,
                        activebackground=BG, activeforeground=FG).pack(anchor="w", padx=24)
-    tk.Label(t, text="Los bloqueos temporales se levantan solos mientras NavTool esté abierto como administrador.",
+    tk.Label(t, text="Los bloqueos temporales se levantan solos mientras TrafficBar esté abierto como administrador.",
              bg=BG, fg=MUTED, font=("Segoe UI", 8), wraplength=460, justify="left").pack(padx=16, pady=(4, 0))
     row = tk.Frame(t, bg=BG)
     row.pack(fill="x", padx=16, pady=14)
@@ -210,11 +210,11 @@ class VentanaBloqueados(tk.Toplevel):
     def __init__(self, app):
         super().__init__(app, bg=BG)
         self.app = app
-        self.title("NavTool – Programas bloqueados")
+        self.title("TrafficBar – Programas bloqueados")
         self.attributes("-topmost", True)
         if hasattr(app, "place_near"):
             app.place_near(self, 760, 380)
-        tk.Label(self, text="Programas sin acceso a Internet (reglas del Cortafuegos creadas por NavTool)",
+        tk.Label(self, text="Programas sin acceso a Internet (reglas del Cortafuegos creadas por TrafficBar)",
                  bg=BG, fg=FG, anchor="w").pack(fill="x", padx=12, pady=(10, 2))
         st = ttk.Style(self)
         st.configure("B.Treeview", background=PANEL, fieldbackground=PANEL, foreground=FG,

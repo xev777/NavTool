@@ -141,9 +141,9 @@ def build_report(rows, in_user_list, now=None):
     if active_trackers == 0 and trackers == 0:
         verdict = "Página limpia: no contactó con rastreadores conocidos."
     elif active_trackers == 0:
-        verdict = f"Contactó con {trackers} rastreador(es), pero NavTool los bloqueó todos."
+        verdict = f"Contactó con {trackers} rastreador(es), pero TrafficBar los bloqueó todos."
     else:
-        verdict = (f"{active_trackers} rastreador(es) recibieron datos de tu visita; NavTool bloqueó "
+        verdict = (f"{active_trackers} rastreador(es) recibieron datos de tu visita; TrafficBar bloqueó "
                    f"{protected} más." if protected else
                    f"{active_trackers} rastreador(es) recibieron datos de tu visita.")
     return {

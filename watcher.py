@@ -1,4 +1,4 @@
-"""Vigilante en segundo plano de NavTool.
+"""Vigilante en segundo plano de TrafficBar.
 
 - Detecta programas que salen a Internet por primera vez (o desde otra ruta) y avisa.
 - Guarda el tráfico total por minuto (siempre) y por programa (si hay captura Npcap).
@@ -35,7 +35,7 @@ def is_public(ip):
 
 class Watcher(threading.Thread):
     def __init__(self, hist, get_cfg, notify, get_engine=lambda: None):
-        super().__init__(daemon=True, name="NavTool-watcher")
+        super().__init__(daemon=True, name="TrafficBar-watcher")
         self.hist, self.get_cfg, self.notify, self.get_engine = hist, get_cfg, notify, get_engine
         self.stop_evt = threading.Event()
         self.baseline_pending = hist.program_count() == 0   # primera vez: aprender sin avisar
@@ -205,7 +205,7 @@ class Watcher(threading.Thread):
             dest = r["host"] + (f" ({r['company']})" if r["company"] else "")
             self.alert("telemetry", f"{r['proc']} envió telemetría a {dest}",
                        f"{r['proc']} se conectó con {dest}, un servidor de telemetría/diagnóstico "
-                       "conocido. NavTool solo lo registra: no bloquea la conexión.", r["proc"])
+                       "conocido. TrafficBar solo lo registra: no bloquea la conexión.", r["proc"])
 
     def check_upload(self, up_bytes):
         self.up_win.append(up_bytes)

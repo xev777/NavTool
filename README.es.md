@@ -1,4 +1,6 @@
-# NavTool
+# TrafficBar
+
+*(Antes NavTool — renombrado en la 2.0.0 para evitar coincidir con el nombre de una empresa sin relación. Misma app, misma licencia, mismo autor.)*
 
 **Una barra flotante para Windows que te muestra y controla lo que pasa con tu conexión a Internet**:
 cómo cargan las páginas, quién te rastrea y qué programas usan tu red. Funciona con todos los navegadores.
@@ -10,7 +12,7 @@ cómo cargan las páginas, quién te rastrea y qué programas usan tu red. Funci
 | | |
 |---|---|
 | **Barra de carga** | Ve cada conexión de una página mientras carga y **córtala** con un clic (pop-ups, cargas en cadena). |
-| **Informe de privacidad** | Una nota (A–F) por página: qué rastreadores contactó y cuáles bloqueó NavTool. |
+| **Informe de privacidad** | Una nota (A–F) por página: qué rastreadores contactó y cuáles bloqueó TrafficBar. |
 | **Listas de bloqueo** | Lista incluida, listas opcionales (Peter Lowe / StevenBlack), lista personal y excepciones. |
 | **Monitor de red** | Cada programa, con quién habla, cuánto mueve. Captura con Npcap, totales exactos. |
 | **Bloquear un programa** | Clic derecho en el monitor → reglas del Cortafuegos de Windows (1 h / 4 h / hasta desbloquear). |
@@ -32,18 +34,18 @@ Firma de código gratuita proporcionada por [SignPath.io](https://about.signpath
 
 Descarga desde la página de [Releases](../../releases):
 
-* `NavTool-Setup-<versión>.exe` — instalador (inglés por defecto; español en la primera pantalla).
-* `NavTool-Portable-<versión>.zip` — portable, no deja rastro en el PC.
+* `TrafficBar-Setup-<versión>.exe` — instalador (inglés por defecto; español en la primera pantalla).
+* `TrafficBar-Portable-<versión>.zip` — portable, no deja rastro en el PC.
 
 Comprueba el SHA-256 de las notas de la versión. Los ejecutables **aún no están firmados**: SmartScreen puede avisar.
 
-El monitor de tráfico necesita [Npcap](https://npcap.com) y permisos de administrador (NavTool no incluye Npcap).
+El monitor de tráfico necesita [Npcap](https://npcap.com) y permisos de administrador (TrafficBar no incluye Npcap).
 
 ## Ejecutar desde el código
 
 ```powershell
 python -m pip install -r requirements.txt
-python navtool.py
+python trafficbar.py
 ```
 
 Compilar instalador y zip portable (necesita [Inno Setup 6](https://jrsoftware.org/isinfo.php)):
@@ -63,7 +65,7 @@ Más: [SEGURIDAD.md](SEGURIDAD.md) · [MEDICION.md](MEDICION.md) · [TRADUCIR.md
 
 ## Licencia
 
-Copyright (C) 2026 Fernando Erazo. NavTool es software libre: puedes redistribuirlo y modificarlo según los
+Copyright (C) 2026 Fernando Erazo. TrafficBar es software libre: puedes redistribuirlo y modificarlo según los
 términos de la **Licencia Pública General de GNU versión 3** (ver [LICENSE](LICENSE)). Se distribuye con la esperanza de que sea
 útil, pero **sin ninguna garantía**.
 
@@ -74,5 +76,5 @@ Componentes de terceros: Npcap (lo instala el usuario), psutil, Python/Tkinter. 
 
 ## Apoyar el proyecto
 
-NavTool es gratuito y lo seguirá siendo. Si te resulta útil, puedes apoyar su desarrollo por PayPal
+TrafficBar es gratuito y lo seguirá siendo. Si te resulta útil, puedes apoyar su desarrollo por PayPal
 (xev667@hotmail.com) — totalmente opcional, y también disponible desde el «Acerca de» de la app.

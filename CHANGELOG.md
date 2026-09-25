@@ -1,5 +1,35 @@
 # Changelog / Registro de cambios
 
+## 2.0.0 — unreleased / sin publicar
+
+**Renamed: NavTool is now TrafficBar / Cambio de nombre: NavTool ahora se llama TrafficBar**
+- Same app, same GPL-3.0 license, same author, same features — only the name changes. The old name
+  coincided with an unrelated company (automotive video interfaces), so the project moves to a name
+  of its own. / Es la misma app, misma licencia GPL-3.0, mismo autor, mismas funciones — solo cambia
+  el nombre. El nombre anterior coincidía con el de una empresa sin relación (interfaces de video para
+  autos), así que el proyecto pasa a tener un nombre propio.
+- New name everywhere: executable (`TrafficBar.exe`), installer, tray icon, window titles, Windows
+  Firewall rules, autostart entry. / Nuevo nombre en todas partes: ejecutable (`TrafficBar.exe`),
+  instalador, icono de la bandeja, títulos de ventana, reglas del Cortafuegos, entrada de inicio
+  automático.
+- **If you had NavTool installed**: uninstall it first (Settings → Apps → NavTool), then install
+  TrafficBar — they are registered as separate programs. Your settings and history move automatically
+  the first time TrafficBar runs (from `%LOCALAPPDATA%\NavTool` to `%LOCALAPPDATA%\TrafficBar`).
+  / **Si tenías NavTool instalado**: desinstálalo primero (Configuración → Aplicaciones → NavTool) y
+  luego instala TrafficBar — quedan registrados como programas separados. Tu configuración e historial
+  se mudan solos la primera vez que abras TrafficBar (de `%LOCALAPPDATA%\NavTool` a
+  `%LOCALAPPDATA%\TrafficBar`).
+- The GitHub repository moves from `xev777/NavTool` to `xev777/TrafficBar` (GitHub redirects the old
+  URL automatically). / El repositorio de GitHub pasa de `xev777/NavTool` a `xev777/TrafficBar`
+  (GitHub redirige la URL anterior automáticamente).
+
+**New / Novedades**
+- **Traffic button LED**: a small green dot next to «📡 Tráfico» lights up only while the per-program
+  background capture is actually running (Npcap, administrator) — the button itself no longer needs to
+  change color to show this. / **Punto en el botón de Tráfico**: un pequeño punto verde junto a
+  «📡 Tráfico» se enciende solo mientras la captura por programa en segundo plano está realmente activa
+  (Npcap, administrador) — el botón ya no necesita cambiar de color para mostrarlo.
+
 ## 1.1.5 — 2026-09-23
 
 **New / Novedades**

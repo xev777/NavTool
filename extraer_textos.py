@@ -13,7 +13,7 @@ import re
 import sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-ARCHIVOS = ["navtool.py", "ayuda.py", "traffic_monitor.py", "history_view.py", "report_view.py",
+ARCHIVOS = ["trafficbar.py", "ayuda.py", "traffic_monitor.py", "history_view.py", "report_view.py",
             "load_panel.py", "privacy.py", "tray.py", "watcher.py", "loadtrack.py", "blocklists.py",
             "programas.py", "cuota.py", "i18n.py", "safety.py", "proxy_core.py", "pcap.py", "netparse.py",
             "tienda.py", "telemetria.py"]

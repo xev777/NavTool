@@ -1,7 +1,7 @@
 """Ventana «Telemetría detectada»: qué programas de este equipo contactaron con servidores de
 telemetría/diagnóstico conocidos (informes de fallos, estadísticas de uso...).
 
-Solo informa: NavTool no bloquea estas conexiones ni el programa que las hizo. La detección la hace
+Solo informa: TrafficBar no bloquea estas conexiones ni el programa que las hizo. La detección la hace
 `traffic_monitor.is_telemetry()` sobre el tráfico capturado; el registro lo guarda `watcher.Watcher`
 como una alerta más (`kind="telemetry"`) en el historial.
 """
@@ -23,7 +23,7 @@ class TelemetryWindow(tk.Toplevel):
     def __init__(self, master, hist, refresh_badge):
         super().__init__(master, bg=BG)
         self.hist, self.refresh_badge = hist, refresh_badge
-        self.title("NavTool – Telemetría detectada")
+        self.title("TrafficBar – Telemetría detectada")
         self.geometry("880x520")
         if hasattr(master, "place_near"):
             master.place_near(self, 880, 520)
@@ -39,7 +39,7 @@ class TelemetryWindow(tk.Toplevel):
 
     def _build(self):
         self._note(
-            "NavTool anota aquí cuándo un programa de este equipo contacta con un servidor de "
+            "TrafficBar anota aquí cuándo un programa de este equipo contacta con un servidor de "
             "telemetría/diagnóstico conocido: informes de fallos, estadísticas de uso u otros datos "
             "que un programa envía a su fabricante. Solo lo registra: no bloquea la conexión ni el "
             "programa. Necesita el monitoreo por programa activado (🕘 Historial y alertas → "

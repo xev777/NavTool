@@ -1,6 +1,6 @@
 """Genera version_info.txt (metadatos de versión del .exe: nombre del producto, versión, autor).
 
-SignPath y los antivirus esperan que el ejecutable declare quién es y qué versión es. Lee la versión de NavTool.iss:
+SignPath y los antivirus esperan que el ejecutable declare quién es y qué versión es. Lee la versión de TrafficBar.iss:
 
     python version_info.py
 """
@@ -11,17 +11,17 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 
 
 def version():
-    with open(os.path.join(AQUI, "NavTool.iss"), encoding="utf-8-sig") as f:
+    with open(os.path.join(AQUI, "TrafficBar.iss"), encoding="utf-8-sig") as f:
         return re.search(r'#define AppVersion "([^"]+)"', f.read()).group(1)
 
 
 def contenido(v):
     p = ([int(x) for x in re.findall(r"\d+", v)] + [0, 0, 0, 0])[:4]
     tupla = ", ".join(map(str, p))
-    campos = [("CompanyName", "Fernando Erazo"), ("FileDescription", "NavTool - network monitor and filter"),
-              ("FileVersion", ".".join(map(str, p))), ("InternalName", "NavTool"),
+    campos = [("CompanyName", "Fernando Erazo"), ("FileDescription", "TrafficBar - network monitor and filter"),
+              ("FileVersion", ".".join(map(str, p))), ("InternalName", "TrafficBar"),
               ("LegalCopyright", "Copyright (C) 2026 Fernando Erazo. GNU GPL v3."),
-              ("OriginalFilename", "NavTool.exe"), ("ProductName", "NavTool"),
+              ("OriginalFilename", "TrafficBar.exe"), ("ProductName", "TrafficBar"),
               ("ProductVersion", v)]
     filas = ",\n        ".join(f"StringStruct('{k}', '{x}')" for k, x in campos)
     return (f"VSVersionInfo(\n  ffi=FixedFileInfo(filevers=({tupla}), prodvers=({tupla}), mask=0x3f, flags=0x0,\n"

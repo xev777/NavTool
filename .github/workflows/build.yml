@@ -1,6 +1,6 @@
 name: Build
 
-# Compila NavTool en los servidores de GitHub (no en un PC personal): así cada binario se puede verificar contra este
+# Compila TrafficBar en los servidores de GitHub (no en un PC personal): así cada binario se puede verificar contra este
 # repositorio, condición necesaria para la firma gratuita de SignPath Foundation.
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
         id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: navtool-windows
+          name: trafficbar-windows
           path: |
             Output/*.exe
             Output/*.zip

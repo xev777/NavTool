@@ -1,5 +1,5 @@
 """Cuota mensual de datos: cuánto llevas gastado en tu ciclo de facturación, cuánto te queda y a qué
-ritmo vas. Usa los contadores reales de la tarjeta de red que NavTool ya guarda cada minuto."""
+ritmo vas. Usa los contadores reales de la tarjeta de red que TrafficBar ya guarda cada minuto."""
 import time
 import tkinter as tk
 from tkinter import ttk
@@ -63,7 +63,7 @@ class QuotaWindow(tk.Toplevel):
     def __init__(self, app, hist, cfg, save_cfg):
         super().__init__(app, bg=BG)
         self.app, self.hist, self.cfg, self.save_cfg = app, hist, cfg, save_cfg
-        self.title("NavTool – Cuota mensual")
+        self.title("TrafficBar – Cuota mensual")
         self.attributes("-topmost", True)
         app.place_near(self, 640, 620)
         self._build()

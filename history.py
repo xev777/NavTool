@@ -1,4 +1,4 @@
-"""Historial local de NavTool (SQLite): informes de páginas, programas, tráfico y alertas."""
+"""Historial local de TrafficBar (SQLite): informes de páginas, programas, tráfico y alertas."""
 import contextlib
 import json
 import sqlite3

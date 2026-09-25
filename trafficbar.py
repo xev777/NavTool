@@ -1,4 +1,4 @@
-"""NavTool – barra flotante de utilidades de navegación para Windows.
+"""TrafficBar – barra flotante de utilidades de navegación para Windows.
 
 Funciona como proxy local: se registra como proxy del sistema, así que
 filtra el tráfico de cualquier navegador (Chrome, Edge, Firefox, Opera...).
@@ -46,7 +46,7 @@ if sys.stdout is None:  # ejecutable sin consola
 if sys.stderr is None:
     sys.stderr = open(os.devnull, "w")
 
-APP = "NavTool"
+APP = "TrafficBar"
 PROXY_PORT = 0            # lo elige el proxy al arrancar (puerto aleatorio alto)
 LEGACY_PORT = 8118        # puerto fijo de versiones anteriores (para limpiar ajustes huérfanos)
 LOCAL_BASE = os.environ.get("LOCALAPPDATA") or os.environ.get("APPDATA") or os.path.expanduser("~")
@@ -110,7 +110,7 @@ DEFAULT_CFG = {
     "engines": DEFAULT_ENGINES,   # hasta 5 motores de búsqueda ({q} = lo que se busca)
     "engine": 0,                  # índice del motor activo
     "auto_panel": True,           # desplegar el panel de carga al empezar a cargar
-    "lists_builtin": True,        # lista de publicidad y analítica incluida en NavTool
+    "lists_builtin": True,        # lista de publicidad y analítica incluida en TrafficBar
     "list_pgl": True,             # lista descargable: Peter Lowe (publicidad y rastreo)
     "list_stevenblack": False,    # lista descargable: StevenBlack (amplia, incluye malware)
     "lists_auto": False,          # actualizar las listas solas cada semana
@@ -206,12 +206,13 @@ def clean_engines(engines):
 def load_cfg():
     if not PORTABLE and not os.path.exists(DATA_DIR):   # migra datos de versiones anteriores
         roaming = os.environ.get("APPDATA") or ""
-        for name in (APP, "Naviscope"):
-            old = os.path.join(roaming, name)
-            if roaming and os.path.isdir(old) and os.path.abspath(old) != os.path.abspath(DATA_DIR):
+        # La app se llamó NavTool (LOCALAPPDATA, luego APPDATA en versiones muy viejas) y antes Naviscope.
+        for base, name in ((LOCAL_BASE, "NavTool"), (roaming, "NavTool"), (roaming, "Naviscope")):
+            old = os.path.join(base, name) if base else ""
+            if old and os.path.isdir(old) and os.path.abspath(old) != os.path.abspath(DATA_DIR):
                 try:
                     shutil.copytree(old, DATA_DIR)
-                    shutil.rmtree(old, ignore_errors=True)   # el historial no debe quedarse en Roaming
+                    shutil.rmtree(old, ignore_errors=True)   # no queda una copia duplicada atrás
                 except OSError:
                     pass
                 break
@@ -303,7 +304,7 @@ def _idiomas_dirs():
 
 def _idioma_inicial():
     """Idioma elegido por el usuario; si no, el que marcó el instalador (idioma.txt); si no, inglés."""
-    env = os.environ.get("NAVTOOL_LANG")
+    env = os.environ.get("TRAFFICBAR_LANG")
     if env:
         return env
     if CFG.get("lang"):
@@ -354,9 +355,9 @@ def acquire_single_instance():
     """True si somos la única copia. Si ya hay otra, le pide que se muestre y devuelve False."""
     global _mutex
     k32 = ctypes.windll.kernel32
-    _mutex = k32.CreateMutexW(None, False, "Local\\NavTool_single_instance")
+    _mutex = k32.CreateMutexW(None, False, "Local\\TrafficBar_single_instance")
     if k32.GetLastError() == 183:                      # ERROR_ALREADY_EXISTS
-        ev = k32.OpenEventW(0x0002, False, "Local\\NavTool_show")
+        ev = k32.OpenEventW(0x0002, False, "Local\\TrafficBar_show")
         if ev:
             k32.SetEvent(ev)
             k32.CloseHandle(ev)
@@ -378,7 +379,7 @@ def is_blocked_host(host):
 
 
 def saved_estimate():
-    """Datos que NavTool se ahorró, ESTIMADOS: conexiones bloqueadas × peso medio que TÚ mediste
+    """Datos que TrafficBar se ahorró, ESTIMADOS: conexiones bloqueadas × peso medio que TÚ mediste
     con «Solo medir». Sin esa medición devuelve None (no se inventa una cifra)."""
     per = CFG.get("ad_bytes_per_conn")
     return int(STATS.blocked * per) if per else None
@@ -456,13 +457,13 @@ def _listening(port):
 
 
 def is_our_proxy(server):
-    """¿Ese ajuste de proxy de Windows lo puso NavTool (esta versión o una anterior)?"""
+    """¿Ese ajuste de proxy de Windows lo puso TrafficBar (esta versión o una anterior)?"""
     ports = {p for p in (PROXY_PORT, _state_port(), LEGACY_PORT) if p}
     return bool(server) and any(server == f"127.0.0.1:{p}" for p in ports)
 
 
 # ------------------------------------------------------ inicio con Windows (solo tu usuario)
-AUTOSTART_NAME = "NavTool"
+AUTOSTART_NAME = "TrafficBar"
 RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
 
 
@@ -639,7 +640,7 @@ class Floating(tk.Tk):
 
         outer = tk.Frame(self, bg=BG, highlightbackground=ACC, highlightthickness=1)
         outer.pack()
-        self.grip = tk.Label(outer, text="◉ NavTool", bg=BG, fg=ACC, font=("Segoe UI", 9, "bold"),
+        self.grip = tk.Label(outer, text="◉ TrafficBar", bg=BG, fg=ACC, font=("Segoe UI", 9, "bold"),
                              cursor="fleur")
         self.grip.pack(side="left", padx=6)
         self._bind_drag(self.grip)
@@ -688,7 +689,7 @@ class Floating(tk.Tk):
         self.tray = None
         try:
             from tray import Tray
-            self.tray = Tray(self._resource("navtool.ico"), self._acts.put, lambda: {
+            self.tray = Tray(self._resource("trafficbar.ico"), self._acts.put, lambda: {
                 "proxy_on": bool(self.proxy.server), "unseen": self._unseen,
                 "tel_unseen": self._tel_unseen,
                 "has_report": bool(self.last_report), "autostart": autostart_enabled(),
@@ -738,9 +739,9 @@ class Floating(tk.Tk):
         self.after(150, self._poll_acts)
 
     def _wait_show_event(self):
-        """Otra copia de NavTool que se abre avisa aquí para que mostremos la barra."""
+        """Otra copia de TrafficBar que se abre avisa aquí para que mostremos la barra."""
         k32 = ctypes.windll.kernel32
-        ev = k32.CreateEventW(None, False, False, "Local\\NavTool_show")
+        ev = k32.CreateEventW(None, False, False, "Local\\TrafficBar_show")
         while not self._show_evt_stop:
             if k32.WaitForSingleObject(ev, 500) == 0:
                 self._acts.put("show_bar")
@@ -818,7 +819,7 @@ class Floating(tk.Tk):
         if not os.path.isdir(r"C:\Windows\System32\Npcap"):
             return True, "Pendiente: falta instalar Npcap (npcap.com)."
         if not ctypes.windll.shell32.IsUserAnAdmin():
-            return True, ("Pendiente: NavTool no está como administrador. Abre «📡 Tráfico» y "
+            return True, ("Pendiente: TrafficBar no está como administrador. Abre «📡 Tráfico» y "
                           "acepta reiniciar como administrador.")
         return True, "Pendiente: se activará en unos segundos."
 
@@ -830,7 +831,17 @@ class Floating(tk.Tk):
         elif self.bg_engine:
             self.bg_engine.stop()
             self.bg_engine = None
+        self._update_traffic_led()
         return self.monitor_state()[1]
+
+    def _update_traffic_led(self):
+        """Punto junto a «📡 Tráfico»: verde solo cuando la captura por programa está realmente
+        activa en segundo plano (Npcap + administrador). No cambia el color del botón."""
+        if not hasattr(self, "traffic_led") or not self.traffic_led.winfo_exists():
+            return
+        eng = getattr(self, "bg_engine", None)
+        on = bool(eng and eng.running)
+        self.traffic_led.itemconfig(self._traffic_led_dot, fill="#3fb97f" if on else BG)
 
     def win_history(self):
         if self.history_win is not None and self.history_win.winfo_exists():
@@ -915,6 +926,11 @@ class Floating(tk.Tk):
                                   width=5 if cp else 8)
         self.stats_lbl.pack(side="left")
         self._btn(bar, "📡" if cp else "📡 Tráfico", self.win_traffic, accent=True, key="traffic")
+        self.traffic_led = tk.Canvas(bar, width=8, height=8, bg=BG, highlightthickness=0)
+        self.traffic_led.pack(side="left", padx=(0, 3 if cp else 5))
+        self._traffic_led_dot = self.traffic_led.create_oval(0, 0, 8, 8, fill=BG, outline="")
+        tip(self.traffic_led, lambda: self.monitor_state()[1])
+        self._update_traffic_led()
         self.report_btn = self._btn(bar, "📋" if cp else "📋 Informe", self.win_report, key="report")
         self.hist_btn = self._btn(bar, "🕘" if cp else "🕘 Historial", self.win_history, key="hist")
         tools = (("Estadísticas", "📊 Estadísticas", self.win_stats),
@@ -947,7 +963,7 @@ class Floating(tk.Tk):
     # ---- tooltips
     def _add_static_tips(self):
         """Partes que no se reconstruyen al cambiar de tamaño: el asa y la píldora contraída."""
-        tip(self.grip, "NavTool\nArrastra para mover la barra: se pega a los bordes de la pantalla.\n"
+        tip(self.grip, "TrafficBar\nArrastra para mover la barra: se pega a los bordes de la pantalla.\n"
                        "Clic derecho: tamaño, anclar, contraer, ocultar.")
         tip(self.mini_dot, lambda: "Proxy ENCENDIDO" if self.proxy.server else "Proxy APAGADO")
         tip(self.mini_bar, "Estado de la carga de páginas.\nClic: expandir la barra.")
@@ -963,10 +979,10 @@ class Floating(tk.Tk):
             "Paso 1 de 3: reducir la barra a tamaño mediano.\nOtro clic la contrae del todo; "
             "un tercero la abre de nuevo en grande."))
         tip(self.power, lambda: (
-            "Proxy ENCENDIDO: NavTool filtra y analiza lo que cargan tus navegadores.\n"
+            "Proxy ENCENDIDO: TrafficBar filtra y analiza lo que cargan tus navegadores.\n"
             "Clic para apagarlo (Windows vuelve a su configuración anterior)."
             if self.proxy.server else
-            "Proxy APAGADO.\nClic para encenderlo: NavTool se pone entre tus navegadores e Internet "
+            "Proxy APAGADO.\nClic para encenderlo: TrafficBar se pone entre tus navegadores e Internet "
             "para bloquear anuncios, medir la carga de las páginas y generar informes.\n"
             "Cambia el proxy de Windows y lo restaura al apagar."))
 
@@ -982,10 +998,10 @@ class Floating(tk.Tk):
         tip(self.load_bar, load_tip)
         tip(self.cut_btn, "Corta AHORA todas las conexiones en curso y rechaza las nuevas durante "
                           "4 s.\nSirve para frenar pop-ups o cargas en cadena.")
-        tip(self.stats_lbl, lambda: f"{STATS.blocked} peticiones bloqueadas desde que abriste NavTool "
+        tip(self.stats_lbl, lambda: f"{STATS.blocked} peticiones bloqueadas desde que abriste TrafficBar "
                                     f"(ahorro estimado: {saved_text()})." + (
             "\nÚltimos: " + ", ".join(STATS.recent_blocked[-3:]) if STATS.recent_blocked else ""))
-        tip(b["help"], "Ayuda: qué es NavTool, cómo funciona, paso a paso y Acerca de.")
+        tip(b["help"], "Ayuda: qué es TrafficBar, cómo funciona, paso a paso y Acerca de.")
         tip(b["traffic"], "Monitor de red en vivo: quién habla con quién, cuánto y con qué "
                           "programa.\nRequiere Npcap y permisos de administrador.")
 
@@ -1200,7 +1216,7 @@ class Floating(tk.Tk):
         self.collapsed = bool(flag)
         (self.full if self.collapsed else self.mini).pack_forget()
         (self.mini if self.collapsed else self.full).pack(side="left")
-        self.grip.config(text="◉" if self.collapsed else "◉ NavTool")
+        self.grip.config(text="◉" if self.collapsed else "◉ TrafficBar")
         if persist:
             CFG["bar_collapsed"] = self.collapsed
             save_cfg(CFG)
@@ -1341,7 +1357,7 @@ class Floating(tk.Tk):
         m.add_command(label="🛍 Compatibilidad con apps de la Tienda…", command=self.win_tienda)
         m.add_separator()
         m.add_command(label="❓ Ayuda", command=self.win_help)
-        m.add_command(label="Acerca de NavTool", command=lambda: self.win_help("Acerca de"))
+        m.add_command(label="Acerca de TrafficBar", command=lambda: self.win_help("Acerca de"))
         m.add_separator()
         m.add_command(label="Ocultar en la bandeja del sistema", command=self.hide_bar)
         self._menu_until = time.time() + 8
@@ -1363,6 +1379,7 @@ class Floating(tk.Tk):
 
     def tick(self):
         self.stats_lbl.config(text=self._stats_text())
+        self._update_traffic_led()
         self._tick_n = getattr(self, "_tick_n", 0) + 1
         if self._tick_n % 60 == 0 and STATS.pot_conns >= 20:     # aprende el peso medio MEDIDO
             avg = STATS.pot_bytes / STATS.pot_conns
@@ -1372,7 +1389,7 @@ class Floating(tk.Tk):
                 CFG["ad_bytes_per_conn"] = new
                 save_cfg(CFG)
         if self.tray:
-            self.tray.set_tooltip(f"NavTool · proxy {'ON' if self.proxy.server else 'OFF'} · "
+            self.tray.set_tooltip(f"TrafficBar · proxy {'ON' if self.proxy.server else 'OFF'} · "
                                   f"{STATS.blocked} bloqueados"
                                   + (f" · {self._unseen} alertas nuevas" if self._unseen else ""))
         self.after(1000, self.tick)
@@ -1489,7 +1506,7 @@ class Floating(tk.Tk):
 
     def _set_icon(self):
         try:
-            self.iconbitmap(default=self._resource("navtool.ico"))
+            self.iconbitmap(default=self._resource("trafficbar.ico"))
         except tk.TclError:
             pass
 
@@ -1710,12 +1727,12 @@ class Floating(tk.Tk):
             exe_dir = os.path.dirname(os.path.abspath(
                 sys.executable if getattr(sys, "frozen", False) else __file__))
             warn = "" if in_protected_folder(exe_dir) else (
-                "\n\n⚠ NavTool está en una carpeta que cualquier programa de tu usuario puede "
+                "\n\n⚠ TrafficBar está en una carpeta que cualquier programa de tu usuario puede "
                 "modificar. Como administrador eso es un riesgo: si algo cambiara estos archivos, "
                 "se ejecutarían con permisos elevados. Lo seguro es instalarlo en «Archivos de "
-                "programa» (ejecuta Instalar-NavTool.ps1).")
+                "programa» (ejecuta Instalar-TrafficBar.ps1).")
             if not messagebox.askyesno(APP, "Capturar todo el tráfico requiere permisos de "
-                                       "administrador.\n\n¿Reiniciar NavTool como "
+                                       "administrador.\n\n¿Reiniciar TrafficBar como "
                                        "administrador?" + warn, parent=self):
                 return
             if getattr(sys, "frozen", False):
@@ -1793,7 +1810,7 @@ class Floating(tk.Tk):
                                       CFG, save_cfg, DATA_DIR)
 
     def show_intro(self):
-        """Animación de 3 s al abrir NavTool (no en el arranque silencioso con Windows)."""
+        """Animación de 3 s al abrir TrafficBar (no en el arranque silencioso con Windows)."""
         if CFG.get("intro", True) and "--segundo-plano" not in sys.argv \
                 and "--traffic" not in sys.argv and self.state() != "withdrawn":
             try:
@@ -1887,7 +1904,7 @@ class Floating(tk.Tk):
                            bg=BG, fg=FG, padx=8, pady=6)
         lf.pack(fill="x", padx=10, pady=4)
         lvars, status = {}, {}
-        rows = [("lists_builtin", f"Incluida en NavTool: publicidad y analítica ({len(blocklists.builtin_domains())} dominios)", None)]
+        rows = [("lists_builtin", f"Incluida en TrafficBar: publicidad y analítica ({len(blocklists.builtin_domains())} dominios)", None)]
         rows += [("list_" + k, f"{tr(v['nombre'])}  ({tr(v['aprox'])})", k) for k, v in blocklists.SOURCES.items()]
         for cfgkey, text, src in rows:
             r = tk.Frame(lf, bg=BG)
@@ -2132,7 +2149,7 @@ if __name__ == "__main__":
     if "--diagnostico" in sys.argv:        # comprueba Npcap, la captura y el icono de la bandeja; escribe diagnostico.txt
         import pcap
         import tray as _tray
-        lineas = [f"NavTool {ayuda.VERSION}", f"Python {sys.version.split()[0]} · frozen={getattr(sys, 'frozen', False)}"]
+        lineas = [f"TrafficBar {ayuda.VERSION}", f"Python {sys.version.split()[0]} · frozen={getattr(sys, 'frozen', False)}"]
         try:
             lineas.append(f"Npcap: {pcap.disponible()}")
             devs = pcap.dispositivos()
@@ -2150,7 +2167,7 @@ if __name__ == "__main__":
         except Exception as e:
             lineas.append(f"ERROR de captura: {e}")
         try:
-            tr_ = _tray.Tray(_res("navtool.ico"), lambda a: None, lambda: {"proxy_on": False, "unseen": 0, "has_report": False,
+            tr_ = _tray.Tray(_res("trafficbar.ico"), lambda a: None, lambda: {"proxy_on": False, "unseen": 0, "has_report": False,
                                                                         "autostart": False, "can_autostart": False})
             tr_.start()
             lineas.append(f"Icono de la bandeja: {'OK' if tr_.hwnd and tr_.hicon else 'FALLO'} · menú de {sum(1 for i in tr_._items() if i)} elementos")
@@ -2170,7 +2187,7 @@ if __name__ == "__main__":
     if "--quitar-bloqueos" in sys.argv:    # lo usa el desinstalador: quita las reglas del cortafuegos
         programas.quitar_todos()
         sys.exit(0)
-    if "--restaurar-proxy" in sys.argv:   # lo usa el instalador/desinstalador antes de cerrar NavTool
+    if "--restaurar-proxy" in sys.argv:   # lo usa el instalador/desinstalador antes de cerrar TrafficBar
         cur = get_system_proxy()
         if cur and cur[0] and is_our_proxy(cur[1]):
             set_system_proxy(False)

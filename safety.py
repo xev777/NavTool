@@ -1,4 +1,4 @@
-"""Utilidades de seguridad compartidas por NavTool."""
+"""Utilidades de seguridad compartidas por TrafficBar."""
 import ctypes
 import ipaddress
 import os

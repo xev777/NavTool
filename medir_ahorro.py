@@ -1,7 +1,7 @@
-"""Mide cuántos datos ahorra NavTool al cargar páginas REALES.
+"""Mide cuántos datos ahorra TrafficBar al cargar páginas REALES.
 
 Carga cada página con Edge (modo sin ventana, perfil nuevo = sin caché) a través del proxy de
-NavTool con distintas configuraciones de bloqueo y compara los bytes que pasan por la red.
+TrafficBar con distintas configuraciones de bloqueo y compara los bytes que pasan por la red.
 No toca el proxy de Windows ni tu configuración (usa carpetas y puertos temporales).
 
     python medir_ahorro.py                     # A (sin bloqueo) vs B (lista inicial)
@@ -72,16 +72,16 @@ def suffix_set_blocker(domains):
 
 
 def construir_configs(nombres):
-    import navtool
-    lista_inicial = [l.strip() for l in navtool.DEFAULT_BLOCKLIST.splitlines() if l.strip()]
+    import trafficbar
+    lista_inicial = [l.strip() for l in trafficbar.DEFAULT_BLOCKLIST.splitlines() if l.strip()]
     cfgs = {"A": ("Sin bloqueo", lambda h: False),
-            "B": ("NavTool: lista inicial (27 dominios)", suffix_set_blocker(lista_inicial))}
+            "B": ("TrafficBar: lista inicial (27 dominios)", suffix_set_blocker(lista_inicial))}
     if "C" in nombres or "D" in nombres:
         import blocklists
         if "C" in nombres:
-            cfgs["C"] = ("NavTool: incluida + Peter Lowe", blocklists.medicion_blocker(("pgl",)))
+            cfgs["C"] = ("TrafficBar: incluida + Peter Lowe", blocklists.medicion_blocker(("pgl",)))
         if "D" in nombres:
-            cfgs["D"] = ("NavTool: incluida + Peter Lowe + StevenBlack",
+            cfgs["D"] = ("TrafficBar: incluida + Peter Lowe + StevenBlack",
                          blocklists.medicion_blocker(("pgl", "stevenblack")))
     return {k: v for k, v in cfgs.items() if k in nombres}
 

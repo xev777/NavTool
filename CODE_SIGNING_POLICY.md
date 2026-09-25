@@ -7,7 +7,7 @@
 
 ## What is signed
 Only binaries built **from this repository** by the public [GitHub Actions workflow](.github/workflows/build.yml):
-`NavTool.exe`, the installer (`NavTool-Setup-<version>.exe`) and the uninstaller. Third-party files bundled in the portable
+`TrafficBar.exe`, the installer (`TrafficBar-Setup-<version>.exe`) and the uninstaller. Third-party files bundled in the portable
 package (the Python runtime and Tk libraries) keep their own signatures and are not re-signed. Builds are never made or signed
 on a personal computer.
 
@@ -21,10 +21,10 @@ on a personal computer.
 All maintainers use multi-factor authentication on GitHub and on SignPath. Changes from anyone else arrive as pull requests that
 a reviewer must approve before merging.
 
-## What NavTool does to your system (announced)
-NavTool is a network monitor and filter. It does **only** what you ask for, and every change is reversible from the app:
+## What TrafficBar does to your system (announced)
+TrafficBar is a network monitor and filter. It does **only** what you ask for, and every change is reversible from the app:
 * turns the Windows **proxy** (`127.0.0.1`) on/off (⏻ button) and restores it on exit;
-* creates Windows Firewall rules named `NavTool block: …` to block a program you choose (needs administrator);
+* creates Windows Firewall rules named `TrafficBar block: …` to block a program you choose (needs administrator);
 * adds Windows loopback exemptions for Microsoft Store apps you choose (needs administrator);
 * optionally starts with Windows (`HKCU\…\Run`).
 The uninstaller removes all of the above.

@@ -1,4 +1,4 @@
-"""Idiomas de NavTool: packs de idioma que se pueden instalar y cargar.
+"""Idiomas de TrafficBar: packs de idioma que se pueden instalar y cargar.
 
 El texto original de la aplicación es español. Un pack de idioma es un archivo .json:
 
@@ -8,7 +8,7 @@ El texto original de la aplicación es español. Un pack de idioma es un archivo
 Los marcadores {} (o {1}, {2}… para reordenar) se sustituyen por las partes variables del texto
 (números, nombres). No se usa str.format: un pack no puede ejecutar nada ni leer atributos.
 
-NavTool traduce en el momento de mostrar los textos (botones, menús, títulos, tablas, avisos), así que
+TrafficBar traduce en el momento de mostrar los textos (botones, menús, títulos, tablas, avisos), así que
 los packs de terceros usan exactamente el mismo formato. `python extraer_textos.py` genera la
 plantilla con todos los textos.
 """

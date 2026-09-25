@@ -1,4 +1,4 @@
-"""Listas de bloqueo de NavTool: una incluida, otras descargables y las excepciones del usuario.
+"""Listas de bloqueo de TrafficBar: una incluida, otras descargables y las excepciones del usuario.
 
 Seguridad de la descarga (una lista es una entrada externa que decide qué sitios se bloquean):
 - solo HTTPS, con verificación de certificado, y las redirecciones tampoco pueden bajar a HTTP;
@@ -43,7 +43,7 @@ _HOST_PREFIX = {"0.0.0.0", "127.0.0.1", "::1", "::", "255.255.255.255"}  # nosec
 
 
 def builtin_domains():
-    """Lista incluida en NavTool: publicidad y analítica conocidas (sin redes sociales, que
+    """Lista incluida en TrafficBar: publicidad y analítica conocidas (sin redes sociales, que
     romperían inicios de sesión y botones de «compartir»)."""
     return set(privacy.ADS) | set(privacy.ANALYTICS)
 
@@ -130,7 +130,7 @@ def descargar(clave, carpeta, abrir=_abrir):
     if not url.startswith("https://"):
         raise ValueError("solo se admiten listas por HTTPS")
     os.makedirs(carpeta, exist_ok=True)
-    req = urllib.request.Request(url, headers={"User-Agent": "NavTool (lista de bloqueo)"})
+    req = urllib.request.Request(url, headers={"User-Agent": "TrafficBar (lista de bloqueo)"})
     with abrir(req, TIMEOUT) as r:
         data = r.read(MAX_BYTES + 1)
     if len(data) > MAX_BYTES:
@@ -176,9 +176,9 @@ def esta_bloqueado(host, bloqueados, excepciones):
 # --------------------------------------------------------- para medir (medir_ahorro.py)
 def medicion_blocker(usar=("pgl",)):
     """Bloqueador con la lista inicial + incluida + listas descargadas (caché en /mediciones)."""
-    import navtool
+    import trafficbar
     carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mediciones", "cache_listas")
-    inicial = {l.strip() for l in navtool.DEFAULT_BLOCKLIST.splitlines() if l.strip()}
+    inicial = {l.strip() for l in trafficbar.DEFAULT_BLOCKLIST.splitlines() if l.strip()}
     sets = []
     for clave in usar:
         if desactualizada(carpeta, clave):

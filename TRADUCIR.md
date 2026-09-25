@@ -1,7 +1,7 @@
 # Add a language / Añadir un idioma
 
-NavTool's original texts are Spanish. A **language pack** is a `.json` file that maps each Spanish text to its
-translation. NavTool translates on the fly, so no code changes are needed.
+TrafficBar's original texts are Spanish. A **language pack** is a `.json` file that maps each Spanish text to its
+translation. TrafficBar translates on the fly, so no code changes are needed.
 
 ## Quick way (from the app)
 

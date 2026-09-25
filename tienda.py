@@ -1,11 +1,11 @@
 """Compatibilidad con las apps de la Tienda de Windows (UWP): WhatsApp, Microsoft Store, etc.
 
-Windows aísla esas apps y NO les deja conectarse a 127.0.0.1, que es donde escucha el proxy de NavTool. Con el
+Windows aísla esas apps y NO les deja conectarse a 127.0.0.1, que es donde escucha el proxy de TrafficBar. Con el
 proxy encendido parecen «bloqueadas». La solución oficial es la «exención de loopback» de cada app
 (`CheckNetIsolation LoopbackExempt`), que necesita administrador. Este módulo la gestiona de forma acotada:
 
 * Solo se exentan paquetes que están INSTALADOS (se comprueba justo antes de aplicar).
-* Solo se quitan las exenciones que hizo NavTool (se guardan en un archivo), nunca las de otros programas.
+* Solo se quitan las exenciones que hizo TrafficBar (se guardan en un archivo), nunca las de otros programas.
 * Sin shell: los argumentos van en lista y el nombre del paquete se valida con una expresión estricta.
 """
 import ctypes
@@ -92,7 +92,7 @@ def _guardar_estado(lista):
 
 
 def gestionadas():
-    """Las exenciones que hizo NavTool (las únicas que NavTool se permite quitar)."""
+    """Las exenciones que hizo TrafficBar (las únicas que TrafficBar se permite quitar)."""
     return {p.lower() for p in _cargar_estado()}
 
 
@@ -121,7 +121,7 @@ def aplicar(agregar, quitar):
             res["error"].append((pfn, clean_text(out.strip(), 120)))
     for pfn in list(dict.fromkeys(quitar))[:200]:
         if not isinstance(pfn, str) or not PFN_RE.match(pfn) or pfn.lower() not in propias:
-            res["error"].append((str(pfn)[:60], "NavTool no creó esa exención: no la quita."))
+            res["error"].append((str(pfn)[:60], "TrafficBar no creó esa exención: no la quita."))
             continue
         rc, out = _run([system_exe("CheckNetIsolation"), "LoopbackExempt", "-d", f"-n={pfn}"])
         if rc == 0:
@@ -135,7 +135,7 @@ def aplicar(agregar, quitar):
 
 
 def quitar_todas():
-    """Al desinstalar: quita las exenciones que hizo NavTool."""
+    """Al desinstalar: quita las exenciones que hizo TrafficBar."""
     if not es_admin():
         return 0
     n = 0
@@ -148,7 +148,7 @@ def quitar_todas():
 
 # ------------------------------------------------------------------------------ elevación (UAC)
 def pedir_cambios(agregar, quitar):
-    """Escribe el pedido y relanza NavTool con administrador para aplicarlo. Devuelve True si se lanzó."""
+    """Escribe el pedido y relanza TrafficBar con administrador para aplicarlo. Devuelve True si se lanzó."""
     with open(_cfg["pedido"], "w", encoding="utf-8") as f:
         json.dump({"hora": time.time(), "agregar": agregar, "quitar": quitar}, f)
     try:
@@ -190,12 +190,12 @@ class VentanaTienda(tk.Toplevel):
     def __init__(self, app):
         super().__init__(app, bg=BG)
         self.app = app
-        self.title("NavTool – Compatibilidad con apps de la Tienda")
+        self.title("TrafficBar – Compatibilidad con apps de la Tienda")
         self.attributes("-topmost", True)
         if hasattr(app, "place_near"):
             app.place_near(self, 700, 560)
         self.filas = {}        # iid -> {nombre, pfn, marcada, exenta, propia}
-        self.desc = tk.Label(self, text=("Con el proxy de NavTool encendido, las apps de la Tienda de Windows (WhatsApp, "
+        self.desc = tk.Label(self, text=("Con el proxy de TrafficBar encendido, las apps de la Tienda de Windows (WhatsApp, "
                              "Microsoft Store…) no pueden conectarse: Windows les prohíbe hablar con este equipo. "
                              "Marca las que quieras usar con el proxy encendido y pulsa «Aplicar». "
                              "Es una excepción de red solo para esas apps y se puede deshacer aquí."),
@@ -271,7 +271,7 @@ class VentanaTienda(tk.Toplevel):
         for iid, f in self.filas.items():
             if q and q not in f["nombre"].lower():
                 continue
-            estado = ("Con excepción (hecha por NavTool)" if f["propia"] else "Con excepción (de otro origen)") \
+            estado = ("Con excepción (hecha por TrafficBar)" if f["propia"] else "Con excepción (de otro origen)") \
                 if f["exenta"] else "Sin excepción"
             self.tree.insert("", "end", iid=iid, values=("☑" if f["marcada"] else "☐", f["nombre"], estado))
 
@@ -281,7 +281,7 @@ class VentanaTienda(tk.Toplevel):
             return
         f = self.filas[iid]
         if f["exenta"] and not f["propia"]:
-            self.msg.config(text="Esa excepción no la creó NavTool: NavTool no la quita.")
+            self.msg.config(text="Esa excepción no la creó TrafficBar: TrafficBar no la quita.")
             return
         f["marcada"] = not f["marcada"]
         self._pintar()
@@ -298,7 +298,7 @@ class VentanaTienda(tk.Toplevel):
         if not agregar and not quitar:
             self.msg.config(text="No hay cambios que aplicar.")
             return
-        if not messagebox.askyesno("NavTool", f"Se van a añadir {len(agregar)} excepción(es) y quitar {len(quitar)}.\n\n"
+        if not messagebox.askyesno("TrafficBar", f"Se van a añadir {len(agregar)} excepción(es) y quitar {len(quitar)}.\n\n"
                                    "Windows pedirá permisos de administrador. ¿Continuar?", parent=self):
             return
         self.btn.config(state="disabled")
@@ -337,5 +337,5 @@ class VentanaTienda(tk.Toplevel):
         self.msg.config(text=txt)
         threading.Thread(target=self._cargar, daemon=True).start()
         if res["ok"]:
-            messagebox.showinfo("NavTool", "Cambios aplicados. Cierra y vuelve a abrir esas apps para que los usen.",
+            messagebox.showinfo("TrafficBar", "Cambios aplicados. Cierra y vuelve a abrir esas apps para que los usen.",
                                 parent=self)

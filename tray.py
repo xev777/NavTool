@@ -1,4 +1,4 @@
-"""Icono de NavTool en el área de notificaciones (junto al reloj de Windows), sin librerías de terceros:
+"""Icono de TrafficBar en el área de notificaciones (junto al reloj de Windows), sin librerías de terceros:
 usa directamente Shell_NotifyIcon y un menú emergente de Windows mediante ctypes."""
 import ctypes
 import threading
@@ -75,7 +75,7 @@ class Tray:
         self.post, self.state, self.icon_path = post, state, icon_path
         self.hwnd = None
         self.hicon = None
-        self.tip = "NavTool"
+        self.tip = "TrafficBar"
         self.thread = None
         self.ready = threading.Event()
         self._wndproc = WNDPROC(self._proc)             # se conserva: si se libera, Windows llamaría a la nada
@@ -106,10 +106,10 @@ class Tray:
              "telemetria", False, None, True),
             SEP,
             (tr("❓ Ayuda"), "help", False, None, True),
-            (tr("Acerca de NavTool"), "about", False, None, True),
+            (tr("Acerca de TrafficBar"), "about", False, None, True),
             SEP,
             (tr("Iniciar con Windows"), "toggle_autostart", False, bool(s["autostart"]), bool(s["can_autostart"])),
-            (tr("Salir de NavTool"), "quit", False, None, True),
+            (tr("Salir de TrafficBar"), "quit", False, None, True),
         ]
 
     # ---- hilo del icono
@@ -121,9 +121,9 @@ class Tray:
     def _run(self):
         hinst = _k.GetModuleHandleW(None)
         wc = _WNDCLASS()
-        wc.lpfnWndProc, wc.hInstance, wc.lpszClassName = self._wndproc, hinst, "NavToolTrayWindow"
+        wc.lpfnWndProc, wc.hInstance, wc.lpszClassName = self._wndproc, hinst, "TrafficBarTrayWindow"
         _u.RegisterClassW(ctypes.byref(wc))
-        self.hwnd = _u.CreateWindowExW(0, "NavToolTrayWindow", "NavTool", 0, 0, 0, 0, 0, None, None, hinst, None)
+        self.hwnd = _u.CreateWindowExW(0, "TrafficBarTrayWindow", "TrafficBar", 0, 0, 0, 0, 0, None, None, hinst, None)
         cx = _u.GetSystemMetrics(SM_CXSMICON)
         self.hicon = _u.LoadImageW(None, self.icon_path, IMAGE_ICON, cx, cx, LR_LOADFROMFILE)
         self._add()

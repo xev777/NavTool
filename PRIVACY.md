@@ -4,12 +4,12 @@
 person installing or operating it.**
 **Este programa no envía información a otros sistemas en red salvo que el usuario o quien lo instala/usa lo solicite expresamente.**
 
-## What NavTool stores (only on your computer) / Qué guarda (solo en tu equipo)
+## What TrafficBar stores (only on your computer) / Qué guarda (solo en tu equipo)
 Settings, per-minute network usage, the programs that used the Internet, the sites you visited through the proxy, and alerts
-(30 days; traffic totals 62 days). Location: `%LOCALAPPDATA%\NavTool` (or the `Datos` folder in the portable version).
+(30 days; traffic totals 62 days). Location: `%LOCALAPPDATA%\TrafficBar` (or the `Datos` folder in the portable version).
 You can delete it from *History → Delete all history* or by deleting that folder.
 
-## What NavTool sends, and only when you ask / Qué envía, y solo si lo pides
+## What TrafficBar sends, and only when you ask / Qué envía, y solo si lo pides
 | Action you request | What is sent | To whom |
 |---|---|---|
 | **Update block lists** (off by default) | An HTTPS request for the list you ticked | The list's own site (Peter Lowe, StevenBlack) |

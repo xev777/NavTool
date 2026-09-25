@@ -6,12 +6,12 @@ Usa carpetas temporales y un cortafuegos simulado (no crea reglas reales).
 """
 import faulthandler; faulthandler.dump_traceback_later(240, exit=True)
 import os, shutil, sys, tempfile, time
-os.environ["NAVTOOL_LANG"] = "es"        # las comprobaciones de textos son sobre el original
+os.environ["TRAFFICBAR_LANG"] = "es"        # las comprobaciones de textos son sobre el original
 tmp = tempfile.mkdtemp(prefix="navfeat_")
 os.environ["APPDATA"] = os.path.join(tmp, "r"); os.environ["LOCALAPPDATA"] = os.path.join(tmp, "l")
 os.makedirs(os.environ["APPDATA"]); os.makedirs(os.environ["LOCALAPPDATA"])
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import navtool as n, cuota, programas
+import trafficbar as n, cuota, programas
 from history import History
 
 ok = fail = 0
@@ -87,7 +87,7 @@ lst = programas.listar(); lst[0]["hasta"] = time.time() - 5; programas._guardar(
 check("Los bloqueos vencidos se levantan solos", programas.caducados() == ["Mi Programa (x86).exe"] and not programas.listar())
 import json
 json.dump([{"nombre": "x", "ruta": exe, "regla": "Regla de OTRO programa", "desde": 0, "hasta": 0}], open(os.path.join(tmp, "bloq.json"), "w"))
-check("Ignora reglas que no son de NavTool (no las toca)", programas.listar() == [])
+check("Ignora reglas que no son de TrafficBar (no las toca)", programas.listar() == [])
 open(os.path.join(tmp, "bloq.json"), "w").write("{corrupto")
 check("Estado corrupto no rompe nada", programas.listar() == [])
 programas.bloquear(exe, 0); calls.clear()
@@ -175,7 +175,7 @@ check("En el pack de inglés cada traducción conserva sus {}", not malos, str(m
 import extraer_textos as ex
 ids = set(ex.extraer())
 falta = [k for k in ids if k not in en["strings"] and len(k) > 12 and " " in k and not k.startswith(("<script", "Get-", "%", "[", '"'))
-         and not re.fullmatch(r"[\w.\-() /{}]+", k) and k not in ("NavTool block:", "pcap_activate = {}", "🌐 Idioma / Language")]
+         and not re.fullmatch(r"[\w.\-() /{}]+", k) and k not in ("TrafficBar block:", "pcap_activate = {}", "🌐 Idioma / Language")]
 check("El inglés cubre las frases de la interfaz", len(falta) == 0, f"{len(falta)} sin traducir: {falta[:2]}")
 import tkinter as tk
 from tkinter import ttk
@@ -193,7 +193,7 @@ def about_text(dons=None, repo=""):
 t0_ = about_text()
 check("Acerca de muestra los créditos", "Diseño y desarrollo: Fernando" in t0_ and "Claude" in t0_)
 check("Sin donaciones configuradas no aparece nada de donar", "Apoyar el proyecto" not in t0_ and "Código fuente" not in t0_)
-t1_ = about_text([{"nombre": "PayPal", "url": "https://paypal.me/x"}, {"nombre": "Malo", "url": "javascript:alert(1)"}, {"nombre": "Cartera", "texto": "abc123"}], "https://github.com/x/NavTool")
+t1_ = about_text([{"nombre": "PayPal", "url": "https://paypal.me/x"}, {"nombre": "Malo", "url": "javascript:alert(1)"}, {"nombre": "Cartera", "texto": "abc123"}], "https://github.com/x/TrafficBar")
 btns = []
 def walk(w):
     for c in w.winfo_children(): yield c; yield from walk(c)
@@ -241,14 +241,14 @@ llamadas.clear()
 r = tienda.aplicar([WA, EV, "x; calc"], [])
 add = [c for c in llamadas if "-a" in c]
 check("Añade solo lo que está instalado y con argumentos separados (sin shell)", r["ok"] == [WA] and len(add) == 1 and add[0][-1] == f"-n={WA}" and len(r["error"]) == 2, str(add[:1]))
-check("Se apunta lo que hizo NavTool", tienda.gestionadas() == {WA.lower()})
+check("Se apunta lo que hizo TrafficBar", tienda.gestionadas() == {WA.lower()})
 llamadas.clear()
 r = tienda.aplicar([], [ST, WA])
 rem = [c for c in llamadas if "-d" in c]
-check("Solo quita lo que NavTool creó (nunca una exención ajena)", r["ok"] == [WA] and len(rem) == 1 and any(e[0] == ST for e in r["error"]) and tienda.gestionadas() == set())
+check("Solo quita lo que TrafficBar creó (nunca una exención ajena)", r["ok"] == [WA] and len(rem) == 1 and any(e[0] == ST for e in r["error"]) and tienda.gestionadas() == set())
 tienda.aplicar([WA], [])
 n_ = tienda.quitar_todas()
-check("Al desinstalar se quitan las de NavTool", n_ == 1 and tienda.gestionadas() == set())
+check("Al desinstalar se quitan las de TrafficBar", n_ == 1 and tienda.gestionadas() == set())
 # pedido elevado
 import json as _jj
 pedido = tienda._cfg["pedido"]
@@ -279,7 +279,7 @@ class E_: pass
 ev = E_(); ev.x, ev.y = 5, 5
 w.tree.identify_row = lambda y: ajena; w.tree.identify_column = lambda x: "#1"
 antes = w.filas[ajena]["marcada"]; w._clic(ev)
-check("Una exención ajena no se puede desmarcar desde NavTool", w.filas[ajena]["marcada"] == antes)
+check("Una exención ajena no se puede desmarcar desde TrafficBar", w.filas[ajena]["marcada"] == antes)
 w.destroy()
 # el aviso de una sola vez
 n.CFG["store_hint"] = False; avisos = []
@@ -356,6 +356,21 @@ check("Abrirla marca como leídas sus detecciones y avisa a la barra para refres
 tw.destroy()
 check("El menú de la bandeja incluye Telemetría detectada",
       any(item and item[1] == "telemetria" for item in tr_test._items()))
+
+# ---------------- punto verde junto a «Tráfico»: activo solo con captura por programa real
+class _FakeBgEngine:
+    running = True
+app.bg_engine = None
+app._update_traffic_led()
+apagado = app.traffic_led.itemcget(app._traffic_led_dot, "fill")
+app.bg_engine = _FakeBgEngine()
+app._update_traffic_led()
+encendido = app.traffic_led.itemcget(app._traffic_led_dot, "fill")
+check("El punto junto a «Tráfico» se enciende en verde solo con captura por programa activa",
+      encendido == "#3fb97f" and apagado != encendido)
+check("El botón de «Tráfico» no cambia de color con el modo administrador",
+      app._btns["traffic"].cget("bg") == "#1f6fa8")
+app.bg_engine = None
 
 app.quit_app(); shutil.rmtree(tmp, ignore_errors=True)
 print(f"\nRESULTADO: {ok} bien, {fail} fallos")

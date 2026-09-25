@@ -1,25 +1,25 @@
-﻿; NavTool installer (Inno Setup 6).  Build:  ISCC.exe NavTool.iss   ->   Output\NavTool-Setup-1.0.exe
-; Instalador de NavTool. Antes hay que generar dist\NavTool con PyInstaller (ver compilar.ps1).
+﻿; TrafficBar installer (Inno Setup 6).  Build:  ISCC.exe TrafficBar.iss   ->   Output\TrafficBar-Setup-1.0.exe
+; Instalador de TrafficBar. Antes hay que generar dist\TrafficBar con PyInstaller (ver compilar.ps1).
 ; Este archivo se guarda en UTF-8 CON BOM para que los textos con tildes se vean bien.
 ;
 ; Idioma: el asistente se abre en INGLÉS y ofrece elegir ESPAÑOL. La elección se guarda en
 ; {app}\idioma.txt y es el idioma inicial de la aplicación (luego se cambia desde la propia barra).
 
-#define AppName "NavTool"
-#define AppVersion "1.1.5"
-#define AppExe "NavTool.exe"
+#define AppName "TrafficBar"
+#define AppVersion "2.0.0"
+#define AppExe "TrafficBar.exe"
 
 [Setup]
-AppId={{6F3B2C1A-8D47-4E52-9A0B-3C7E5D1F4A96}
+AppId={{FA9D2CBD-4691-4E3A-AE9C-AB39DD6B2DE1}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher=Fernando Erazo
-AppPublisherURL=https://github.com/xev777/NavTool
-AppSupportURL=https://github.com/xev777/NavTool/issues
+AppPublisherURL=https://github.com/xev777/TrafficBar
+AppSupportURL=https://github.com/xev777/TrafficBar/issues
 VersionInfoVersion={#AppVersion}.0
 VersionInfoCompany=Fernando Erazo
-VersionInfoProductName=NavTool
-VersionInfoDescription=NavTool installer
+VersionInfoProductName=TrafficBar
+VersionInfoDescription=TrafficBar installer
 VersionInfoCopyright=Copyright (C) 2026 Fernando Erazo. GNU GPL v3.
 DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
@@ -28,8 +28,8 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=admin
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=Output
-OutputBaseFilename=NavTool-Setup-{#AppVersion}
-SetupIconFile=navtool.ico
+OutputBaseFilename=TrafficBar-Setup-{#AppVersion}
+SetupIconFile=trafficbar.ico
 UninstallDisplayIcon={app}\{#AppExe}
 Compression=lzma2/ultra
 SolidCompression=yes
@@ -47,21 +47,21 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 [CustomMessages]
 english.TaskDesktop=Create a desktop shortcut
 spanish.TaskDesktop=Crear un acceso directo en el escritorio
-english.TaskAutostart=Start NavTool with Windows (stays in the system tray)
-spanish.TaskAutostart=Iniciar NavTool con Windows (queda en la bandeja del sistema)
-english.RunNow=Open NavTool now
-spanish.RunNow=Abrir NavTool ahora
-english.NpcapNote=NavTool is installed.%n%nTo use the traffic monitor ("Traffic") you also need Npcap (npcap.com). The rest of the features do not need it.
-spanish.NpcapNote=NavTool está instalado.%n%nPara usar el monitor de tráfico ("Tráfico") necesitas además Npcap (npcap.com). El resto de funciones no lo necesita.
-english.DeleteData=Do you also want to delete your NavTool settings and history?%n%n
-spanish.DeleteData=¿Quieres borrar también tu configuración y tu historial de NavTool?%n%n
+english.TaskAutostart=Start TrafficBar with Windows (stays in the system tray)
+spanish.TaskAutostart=Iniciar TrafficBar con Windows (queda en la bandeja del sistema)
+english.RunNow=Open TrafficBar now
+spanish.RunNow=Abrir TrafficBar ahora
+english.NpcapNote=TrafficBar is installed.%n%nTo use the traffic monitor ("Traffic") you also need Npcap (npcap.com). The rest of the features do not need it.
+spanish.NpcapNote=TrafficBar está instalado.%n%nPara usar el monitor de tráfico ("Tráfico") necesitas además Npcap (npcap.com). El resto de funciones no lo necesita.
+english.DeleteData=Do you also want to delete your TrafficBar settings and history?%n%n
+spanish.DeleteData=¿Quieres borrar también tu configuración y tu historial de TrafficBar?%n%n
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:TaskDesktop}"; Flags: unchecked
 Name: "autostart"; Description: "{cm:TaskAutostart}"; Flags: unchecked
 
 [Files]
-Source: "dist\NavTool\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\TrafficBar\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"
@@ -75,18 +75,18 @@ Filename: "{app}\{#AppExe}"; Description: "{cm:RunNow}"; Flags: nowait postinsta
 
 [UninstallRun]
 Filename: "{app}\{#AppExe}"; Parameters: "--desactivar-inicio"; Flags: runhidden; RunOnceId: "QuitarInicio"
-; Removes the Windows Firewall rules NavTool created ("NavTool block: ...")
+; Removes the Windows Firewall rules TrafficBar created ("TrafficBar block: ...")
 Filename: "{app}\{#AppExe}"; Parameters: "--quitar-bloqueos"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarBloqueos"
-; Removes the Microsoft Store apps loopback exemptions NavTool created
+; Removes the Microsoft Store apps loopback exemptions TrafficBar created
 Filename: "{app}\{#AppExe}"; Parameters: "--quitar-exenciones"; Flags: runhidden waituntilterminated; RunOnceId: "QuitarExenciones"
 
 [UninstallDelete]
 Type: files; Name: "{app}\idioma.txt"
 
 [Code]
-// Closes NavTool before installing/updating/uninstalling. First it asks NavTool to give Windows back its
+// Closes TrafficBar before installing/updating/uninstalling. First it asks TrafficBar to give Windows back its
 // proxy setting (otherwise an abrupt close could leave you without Internet).
-procedure DetenerNavTool(const Carpeta: String);
+procedure DetenerTrafficBar(const Carpeta: String);
 var
   Codigo: Integer;
 begin
@@ -98,13 +98,13 @@ end;
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
 begin
-  DetenerNavTool(ExpandConstant('{app}'));
+  DetenerTrafficBar(ExpandConstant('{app}'));
   Result := '';
 end;
 
 function InitializeUninstall(): Boolean;
 begin
-  DetenerNavTool(ExpandConstant('{app}'));
+  DetenerTrafficBar(ExpandConstant('{app}'));
   Result := True;
 end;
 
